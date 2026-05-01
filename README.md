@@ -105,6 +105,7 @@ Este servidor expone las siguientes herramientas MCP organizadas por categorías
 - `get_provincias`: Listado de provincias.
 - `get_localidades`: Listado de localidades.
 - `get_tasas_iva`: Listado de alícuotas de IVA.
+- `get_actividades_economicas`: Listado de actividades económicas.
 - `get_vendedores`: Listado de vendedores configurados.
 - `get_puntos_venta`: Listado de puntos de venta activos.
 - `get_categorias_cuenta`: Categorías de cuentas contables.
