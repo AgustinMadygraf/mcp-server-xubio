@@ -4,7 +4,7 @@ import {
   IPresupuestoRepository, IRemitoRepository, IVendedorRepository, IPuntoVentaRepository,
   IMonedaRepository, IPaisRepository, IProvinciaRepository, ILocalidadRepository, ITasaIvaRepository, IActividadEconomicaRepository, IUnidadMedidaRepository,
   IAsientoManualRepository, IAjusteStockRepository, ICentroDeCostoRepository, IListaPrecioRepository, ICategoriaCuentaRepository, ICategoriaFiscalRepository, ICircuitoContableRepository, IIdentificacionTributariaRepository,
-  IMiEmpresaRepository, IPercepcionRepository, IRetencionRepository, ISucursalRepository, ITransporteRepository, ITalonarioRepository, IUnidadMedidaFinalRepository, IProductoCompraRepository, IRelacionComprobanteRepository, IComprobantesAsociadosRepository
+  IMiEmpresaRepository, IPercepcionRepository, IRetencionRepository, ISucursalRepository, ITransporteRepository, ITalonarioRepository, ITalonarioCobranzaRepository, IUnidadMedidaFinalRepository, IProductoCompraRepository, IRelacionComprobanteRepository, IComprobantesAsociadosRepository
 } from "../../domain/repositories/IBatchRepositories.js";
 import { FacturaCompra } from "../../domain/entities/FacturaCompra.js";
 import { OrdenCompra } from "../../domain/entities/OrdenCompra.js";
@@ -52,6 +52,7 @@ export class XubioRetencionRepository extends XubioBaseRepository implements IRe
 export class XubioSucursalRepository extends XubioBaseRepository implements ISucursalRepository { async findAll() { return await this.get("sucursalClienteBean"); } }
 export class XubioTransporteRepository extends XubioBaseRepository implements ITransporteRepository { async findAll() { return await this.get("transporteBean"); } }
 export class XubioTalonarioRepository extends XubioBaseRepository implements ITalonarioRepository { async findAll() { return await this.get("talonario"); } }
+export class XubioTalonarioCobranzaRepository extends XubioBaseRepository implements ITalonarioCobranzaRepository { async findAll() { return await this.get("talonarioCobranza"); } }
 export class XubioUnidadMedidaFinalRepository extends XubioBaseRepository implements IUnidadMedidaFinalRepository { async findAll() { return await this.get("unidadMedida"); } }
 export class XubioProductoCompraRepository extends XubioBaseRepository implements IProductoCompraRepository { async findAll() { return await this.get("ProductoCompraBean"); } }
 export class XubioRelacionComprobanteRepository extends XubioBaseRepository implements IRelacionComprobanteRepository { async findAll() { return await this.get("relacionFacturaNotaDeCredito"); } }

@@ -3,7 +3,7 @@ import {
   IPresupuestoRepository, IRemitoRepository, IVendedorRepository, IPuntoVentaRepository,
   IMonedaRepository, IPaisRepository, IProvinciaRepository, ILocalidadRepository, ITasaIvaRepository, IActividadEconomicaRepository, IUnidadMedidaRepository,
   IAsientoManualRepository, IAjusteStockRepository, ICentroDeCostoRepository, IListaPrecioRepository, ICategoriaCuentaRepository, ICategoriaFiscalRepository, ICircuitoContableRepository, IIdentificacionTributariaRepository,
-  IMiEmpresaRepository, IPercepcionRepository, IRetencionRepository, ISucursalRepository, ITransporteRepository, ITalonarioRepository, IUnidadMedidaFinalRepository, IProductoCompraRepository, IRelacionComprobanteRepository, IComprobantesAsociadosRepository
+  IMiEmpresaRepository, IPercepcionRepository, IRetencionRepository, ISucursalRepository, ITransporteRepository, ITalonarioRepository, ITalonarioCobranzaRepository, IUnidadMedidaFinalRepository, IProductoCompraRepository, IRelacionComprobanteRepository, IComprobantesAsociadosRepository
 } from "../../domain/repositories/IBatchRepositories.js";
 
 // Bloque 1-5 ...
@@ -40,6 +40,7 @@ export class GetRetencionesUseCase { constructor(private repo: IRetencionReposit
 export class GetSucursalesUseCase { constructor(private repo: ISucursalRepository) {} async execute() { return await this.repo.findAll(); } }
 export class GetTransportesUseCase { constructor(private repo: ITransporteRepository) {} async execute() { return await this.repo.findAll(); } }
 export class GetTalonariosUseCase { constructor(private repo: ITalonarioRepository) {} async execute() { return await this.repo.findAll(); } }
+export class GetTalonariosCobranzaUseCase { constructor(private repo: ITalonarioCobranzaRepository) {} async execute() { return await this.repo.findAll(); } }
 export class GetUnidadesMedidaFinalUseCase { constructor(private repo: IUnidadMedidaFinalRepository) {} async execute() { return await this.repo.findAll(); } }
 export class GetProductosCompraUseCase { constructor(private repo: IProductoCompraRepository) {} async execute() { return await this.repo.findAll(); } }
 export class GetRelacionComprobantesUseCase { constructor(private repo: IRelacionComprobanteRepository) {} async execute() { return await this.repo.findAll(); } }

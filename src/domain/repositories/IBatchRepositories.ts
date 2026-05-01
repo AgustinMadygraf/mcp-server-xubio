@@ -45,6 +45,7 @@ export interface IRetencionRepository { findAll(): Promise<Retencion[]>; }
 export interface ISucursalRepository { findAll(): Promise<Sucursal[]>; }
 export interface ITransporteRepository { findAll(): Promise<Transporte[]>; }
 export interface ITalonarioRepository { findAll(): Promise<Talonario[]>; }
+export interface ITalonarioCobranzaRepository { findAll(): Promise<Talonario[]>; }
 export interface IUnidadMedidaFinalRepository { findAll(): Promise<UnidadMedidaFinal[]>; }
 export interface IProductoCompraRepository { findAll(): Promise<ProductoCompra[]>; }
 export interface IRelacionComprobanteRepository { findAll(): Promise<RelacionComprobante[]>; }

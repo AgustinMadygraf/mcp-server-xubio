@@ -10,7 +10,7 @@ import {
   XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository,
   XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository,
   XubioAsientoManualRepository, XubioAjusteStockRepository, XubioCentroDeCostoRepository, XubioListaPrecioRepository, XubioCategoriaCuentaRepository, XubioCategoriaFiscalRepository, XubioCircuitoContableRepository, XubioIdentificacionTributariaRepository,
-  XubioMiEmpresaRepository, XubioPercepcionRepository, XubioRetencionRepository, XubioSucursalRepository, XubioTransporteRepository, XubioTalonarioRepository, XubioUnidadMedidaFinalRepository, XubioProductoCompraRepository, XubioRelacionComprobanteRepository, XubioComprobantesAsociadosRepository
+  XubioMiEmpresaRepository, XubioPercepcionRepository, XubioRetencionRepository, XubioSucursalRepository, XubioTransporteRepository, XubioTalonarioRepository, XubioTalonarioCobranzaRepository, XubioUnidadMedidaFinalRepository, XubioProductoCompraRepository, XubioRelacionComprobanteRepository, XubioComprobantesAsociadosRepository
 } from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
@@ -24,7 +24,7 @@ import {
   GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase,
   GetMonedasUseCase, GetPaisesUseCase, GetProvinciasUseCase, GetLocalidadesUseCase, GetTasasIvaUseCase, GetActividadesEconomicasUseCase, GetUnidadesMedidaUseCase,
   GetAsientosManualesUseCase, GetAjustesStockUseCase, GetCentrosDeCostoUseCase, GetListasPrecioUseCase, GetCategoriasCuentaUseCase, GetCategoriasFiscalesUseCase, GetCircuitosContablesUseCase, GetIdentificacionesTributariasUseCase,
-  GetMiEmpresaUseCase, GetPercepcionesUseCase, GetRetencionesUseCase, GetSucursalesUseCase, GetTransportesUseCase, GetTalonariosUseCase, GetUnidadesMedidaFinalUseCase, GetProductosCompraUseCase, GetRelacionComprobantesUseCase, GetComprobantesAsociadosUseCase
+  GetMiEmpresaUseCase, GetPercepcionesUseCase, GetRetencionesUseCase, GetSucursalesUseCase, GetTransportesUseCase, GetTalonariosUseCase, GetTalonariosCobranzaUseCase, GetUnidadesMedidaFinalUseCase, GetProductosCompraUseCase, GetRelacionComprobantesUseCase, GetComprobantesAsociadosUseCase
 } from "./application/use-cases/BatchUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
@@ -81,6 +81,7 @@ async function main() {
   registerTool("get_sucursales", new GetSucursalesUseCase(new XubioSucursalRepository(authService)), "Obtener el listado de sucursales de clientes");
   registerTool("get_transportes", new GetTransportesUseCase(new XubioTransporteRepository(authService)), "Obtener el listado de transportes");
   registerTool("get_talonarios", new GetTalonariosUseCase(new XubioTalonarioRepository(authService)), "Obtener el listado de talonarios");
+  registerTool("get_talonario_cobranza", new GetTalonariosCobranzaUseCase(new XubioTalonarioCobranzaRepository(authService)), "Obtener el listado de talonarios de cobranza");
   registerTool("get_unidades_medida", new GetUnidadesMedidaFinalUseCase(new XubioUnidadMedidaFinalRepository(authService)), "Obtener el listado de unidades de medida");
   registerTool("get_productos_compra", new GetProductosCompraUseCase(new XubioProductoCompraRepository(authService)), "Obtener el catálogo de productos de compra");
   registerTool("get_relacion_comprobantes", new GetRelacionComprobantesUseCase(new XubioRelacionComprobanteRepository(authService)), "Obtener relación entre facturas y notas de crédito");
