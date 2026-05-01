@@ -4,6 +4,9 @@ Para más detalles sobre los campos y esquemas devueltos, consulta:
 - [Documentación Oficial de la API de Xubio](https://xubio.com/API/documentation/index.html#)
 - [Definición Swagger (JSON)](https://xubio.com/API/1.1/swagger.json)
 
+> [!NOTE]
+> Actualmente cubrimos **4 de los 54** endpoints de lectura disponibles. Consulta el [TODO](TODO.md) para ver el listado completo de endpoints pendientes.
+
 El servidor expone las siguientes herramientas a través del protocolo MCP:
 
 ### `get_clientes`

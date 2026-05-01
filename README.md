@@ -81,6 +81,8 @@ Si prefieres hacerlo manualmente, añade lo siguiente a tu archivo de configurac
 - [Autenticación](docs/authentication.md)
 - [Depuración](docs/debugging.md)
 - [Herramientas](docs/tools.md)
+- [Requerimientos (SRS)](docs/SRS.md)
+- [Hoja de Ruta (TODO)](docs/TODO.md)
 
 ## Referencias Oficiales
 
