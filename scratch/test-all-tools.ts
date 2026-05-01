@@ -5,6 +5,7 @@ import { XubioFacturaRepository } from "../src/infrastructure/api/XubioFacturaRe
 import { XubioProveedorRepository } from "../src/infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "../src/infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "../src/infrastructure/api/XubioCobranzaRepository.js";
+import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository } from "../src/infrastructure/api/BatchXubioRepositories.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,10 +16,13 @@ async function runTests() {
   const repos = [
     { name: "Clientes", repo: new XubioClienteRepository(auth) },
     { name: "Productos", repo: new XubioProductoRepository(auth) },
-    { name: "Facturas", repo: new XubioFacturaRepository(auth) },
+    { name: "Facturas Venta", repo: new XubioFacturaRepository(auth) },
     { name: "Proveedores", repo: new XubioProveedorRepository(auth) },
     { name: "Stock", repo: new XubioStockRepository(auth) },
     { name: "Cobranzas", repo: new XubioCobranzaRepository(auth) },
+    { name: "Facturas Compra", repo: new XubioFacturaCompraRepository(auth) },
+    { name: "Ordenes Compra", repo: new XubioOrdenCompraRepository(auth) },
+    { name: "Depositos", repo: new XubioDepositoRepository(auth) },
   ];
 
   console.log("🚀 Iniciando suite de pruebas de regresión...\n");

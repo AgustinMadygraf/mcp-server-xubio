@@ -7,6 +7,7 @@ import { XubioFacturaRepository } from "./infrastructure/api/XubioFacturaReposit
 import { XubioProveedorRepository } from "./infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "./infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "./infrastructure/api/XubioCobranzaRepository.js";
+import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository } from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
 import { GetProductosUseCase } from "./application/use-cases/GetProductosUseCase.js";
@@ -14,6 +15,7 @@ import { GetFacturasUseCase } from "./application/use-cases/GetFacturasUseCase.j
 import { GetProveedoresUseCase } from "./application/use-cases/GetProveedoresUseCase.js";
 import { GetStockUseCase } from "./application/use-cases/GetStockUseCase.js";
 import { GetCobranzasUseCase } from "./application/use-cases/GetCobranzasUseCase.js";
+import { GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase } from "./application/use-cases/BatchUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
@@ -31,6 +33,9 @@ async function bootstrap() {
   const proveedorRepo = new XubioProveedorRepository(authService);
   const stockRepo = new XubioStockRepository(authService);
   const cobranzaRepo = new XubioCobranzaRepository(authService);
+  const facturaCompraRepo = new XubioFacturaCompraRepository(authService);
+  const ordenCompraRepo = new XubioOrdenCompraRepository(authService);
+  const depositoRepo = new XubioDepositoRepository(authService);
 
   // Application (Use Cases)
   const getClientesUseCase = new GetClientesUseCase(clienteRepo);
@@ -39,6 +44,9 @@ async function bootstrap() {
   const getProveedoresUseCase = new GetProveedoresUseCase(proveedorRepo);
   const getStockUseCase = new GetStockUseCase(stockRepo);
   const getCobranzasUseCase = new GetCobranzasUseCase(cobranzaRepo);
+  const getFacturasCompraUseCase = new GetFacturasCompraUseCase(facturaCompraRepo);
+  const getOrdenesCompraUseCase = new GetOrdenesCompraUseCase(ordenCompraRepo);
+  const getDepositosUseCase = new GetDepositosUseCase(depositoRepo);
 
   // Register Tools
   const registry = ToolRegistry.getInstance();
@@ -71,6 +79,21 @@ async function bootstrap() {
   registry.register("get_cobranzas", {
     useCase: getCobranzasUseCase,
     description: "Obtener el listado de cobranzas de Xubio",
+  });
+
+  registry.register("get_facturas_compra", {
+    useCase: getFacturasCompraUseCase,
+    description: "Obtener el listado de facturas de compra de Xubio",
+  });
+
+  registry.register("get_ordenes_compra", {
+    useCase: getOrdenesCompraUseCase,
+    description: "Obtener el listado de órdenes de compra de Xubio",
+  });
+
+  registry.register("get_depositos", {
+    useCase: getDepositosUseCase,
+    description: "Obtener el listado de depósitos de Xubio",
   });
 
   // Presentation (MCP)
