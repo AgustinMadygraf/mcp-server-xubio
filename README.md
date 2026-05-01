@@ -115,6 +115,7 @@ Este servidor expone las siguientes herramientas MCP organizadas por categorías
 - `get_sucursales`: Sucursales de clientes.
 - `get_transportes`: Listado de transportes.
 - `get_talonarios`: Talonarios configurados.
+- `get_talonario_cobranza`: Talonarios de cobranza.
 - `get_unidades_medida`: Unidades de medida.
 
 ## Documentación Adicional

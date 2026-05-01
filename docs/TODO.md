@@ -2,8 +2,8 @@
 
 ## Cobertura Actual
 - **Total Endpoints GET en Swagger**: 54
-- **Implementados**: 39 (72%)
-- **Pendientes**: 15 (28%)
+- **Implementados**: 40 (74%)
+- **Pendientes**: 14 (26%)
 
 ---
 
@@ -47,6 +47,7 @@
 - [x] `get_sucursales`: Sucursales de clientes (`/sucursalClienteBean`).
 - [x] `get_transportes`: Transportes (`/transporteBean`).
 - [x] `get_talonarios`: Talonarios (`/talonario`).
+- [x] `get_talonario_cobranza`: Talonarios de cobranza (`/talonarioCobranza`).
 - [x] `get_unidades_medida`: Unidades de medida (`/unidadMedida`).
 
 ---
@@ -63,9 +64,7 @@
 - [ ] **Filtros**: Permitir filtrar por fecha, cliente o estado.
 - [ ] **Testing**: Implementar Unit Tests con Mocks.
 
-### 📚 Endpoints Pendientes (15)
-- [ ] Actividades Económicas (`/actividadEconomicaBean`) - *Importado pero no registrado*
-- [ ] Talonario de Cobranza (`/talonarioCobranza`)
+### 📚 Endpoints Pendientes (14)
 - [ ] URL de PDF (`/imprimirPDF`)
 - [ ] Endpoints por ID (`{id}`):
     - [ ] Cliente por ID
