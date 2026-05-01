@@ -110,8 +110,26 @@ describe("Xubio Tools Integration Tests", () => {
   const tools = registry.list();
 
   it.each(tools)("should execute tool: %s", async (tool) => {
-    // Saltamos los que requieren parámetros específicos
-    if (tool.name.includes("_por_id") || tool.name.includes("_id") || tool.name === "get_pdf_url" || tool.name === "get_comprobantes_asociados") {
+    const toolsRequiringParams = [
+      "get_relacion_comprobantes",
+      "get_comprobantes_asociados",
+      "get_pdf_url",
+      "get_identificaciones_tributarias",
+      "get_cliente_por_id",
+      "get_producto_por_id",
+      "get_factura_por_id",
+      "get_proveedor_por_id",
+      "get_stock_por_producto_id",
+      "get_factura_compra_por_id",
+      "get_orden_compra_por_id",
+      "get_presupuesto_por_id",
+      "get_asiento_manual_por_id",
+      "get_ajuste_stock_por_id",
+      "get_lista_precio_por_id",
+      "get_cuenta_contable_por_id"
+    ];
+
+    if (toolsRequiringParams.includes(tool.name)) {
       console.log(`⏩ Saltando ${tool.name} (Requiere parámetros)`);
       return;
     }
