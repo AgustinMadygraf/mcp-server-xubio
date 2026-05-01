@@ -10,6 +10,12 @@ const PROJECT_ROOT = process.cwd();
 const SERVER_PATH = path.join(PROJECT_ROOT, "dist", "index.js");
 
 const CONFIG_LOCATIONS = [
+  // Antigravity Settings
+  {
+    name: "Antigravity Settings",
+    path: path.join(os.homedir(), ".gemini", "settings.json"),
+    type: "mcpServers"
+  },
   // Antigravity / Gemini CLI
   {
     name: "Antigravity/Gemini CLI",
