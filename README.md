@@ -118,6 +118,23 @@ Este servidor expone las siguientes herramientas MCP organizadas por categorías
 - `get_talonario_cobranza`: Talonarios de cobranza.
 - `get_unidades_medida`: Unidades de medida.
 
+### 🆔 Consultas por ID
+- `get_cliente_por_id`: Obtiene un cliente específico por su ID.
+- `get_producto_por_id`: Obtiene un producto específico por su ID.
+- `get_factura_por_id`: Obtiene una factura de venta específica por su ID.
+- `get_proveedor_por_id`: Obtiene un proveedor específico por su ID.
+- `get_stock_por_producto_id`: Obtiene el stock de un producto específico.
+- `get_factura_compra_por_id`: Obtiene una factura de compra específica por su ID.
+- `get_orden_compra_por_id`: Obtiene una orden de compra específica por su ID.
+- `get_presupuesto_por_id`: Obtiene un presupuesto específico por su ID.
+- `get_asiento_manual_por_id`: Obtiene un asiento manual específico por su ID.
+- `get_ajuste_stock_por_id`: Obtiene un ajuste de stock específico por su ID.
+- `get_lista_precio_por_id`: Obtiene una lista de precio específica por su ID.
+- `get_cuenta_contable_por_id`: Obtiene una cuenta contable específica por su ID.
+
+### 📄 Utilidades
+- `get_pdf_url`: Obtiene la URL pública del PDF de un comprobante (Requiere `idtransaccion` y `tipoimpresion`).
+
 ## Documentación Adicional
 
 - [Arquitectura](docs/architecture.md)

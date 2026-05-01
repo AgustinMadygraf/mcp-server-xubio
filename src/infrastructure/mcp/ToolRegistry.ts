@@ -1,6 +1,7 @@
 export interface ToolHandler {
-  useCase: { execute(): Promise<any> };
+  useCase: { execute(args?: any): Promise<any> };
   description: string;
+  inputSchema?: any;
 }
 
 export class ToolRegistry {
@@ -28,7 +29,7 @@ export class ToolRegistry {
     return Array.from(this.tools.entries()).map(([name, handler]) => ({
       name,
       description: handler.description,
-      inputSchema: { type: "object", properties: {} }, // Expandible si añadimos argumentos
+      inputSchema: handler.inputSchema || { type: "object", properties: {} },
     }));
   }
 }

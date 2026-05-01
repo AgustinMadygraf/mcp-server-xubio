@@ -30,13 +30,14 @@ export class McpServer {
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const toolName = request.params.name;
+      const args = request.params.arguments;
       const handler = this.registry.get(toolName);
 
       if (!handler) {
         throw new McpError(ErrorCode.MethodNotFound, `Herramienta desconocida: ${toolName}`);
       }
 
-      return await this.handleRequest(() => handler.useCase.execute());
+      return await this.handleRequest(() => handler.useCase.execute(args));
     });
   }
 

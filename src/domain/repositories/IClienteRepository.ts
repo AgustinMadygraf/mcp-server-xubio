@@ -4,5 +4,7 @@ export interface IClienteRepository {
   /**
    * Obtiene la lista de clientes (Solo lectura - GET)
    */
-  findAll(): Promise<Cliente[]>;
+  findAll(params?: any): Promise<Cliente[]>;
+  findById(id: number | string): Promise<any>;
+  findById(id: number): Promise<Cliente>;
 }

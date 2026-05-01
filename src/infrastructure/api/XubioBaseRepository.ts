@@ -46,9 +46,18 @@ export abstract class XubioBaseRepository {
     );
   }
 
-  protected async get(endpoint: string) {
+  protected async get(endpoint: string, params?: any) {
     const token = await this.authService.getToken();
     const response = await this.axiosInstance.get(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: params
+    });
+    return response.data;
+  }
+
+  protected async getById(endpoint: string, id: string | number) {
+    const token = await this.authService.getToken();
+    const response = await this.axiosInstance.get(`${endpoint}/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;

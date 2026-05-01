@@ -7,3 +7,4 @@ export interface Talonario { tipoComprobante: string; letraComprobante: string; 
 export interface UnidadMedidaFinal { ID: number; nombre: string; codigo: string; }
 export interface ProductoCompra { productoid: number; nombre: string; codigo: string; }
 export interface RelacionComprobante { idFactura: number; idNotaDeCredito: number; }
+export interface ImprimirPDF { nombrexml: string; datasource: string; urlPdf: string; }

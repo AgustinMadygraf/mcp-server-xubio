@@ -10,7 +10,7 @@ import {
   XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository,
   XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository,
   XubioAsientoManualRepository, XubioAjusteStockRepository, XubioCentroDeCostoRepository, XubioListaPrecioRepository, XubioCategoriaCuentaRepository, XubioCategoriaFiscalRepository, XubioCircuitoContableRepository, XubioIdentificacionTributariaRepository,
-  XubioMiEmpresaRepository, XubioPercepcionRepository, XubioRetencionRepository, XubioSucursalRepository, XubioTransporteRepository, XubioTalonarioRepository, XubioTalonarioCobranzaRepository, XubioUnidadMedidaFinalRepository, XubioProductoCompraRepository, XubioRelacionComprobanteRepository, XubioComprobantesAsociadosRepository
+  XubioMiEmpresaRepository, XubioPercepcionRepository, XubioRetencionRepository, XubioSucursalRepository, XubioTransporteRepository, XubioTalonarioRepository, XubioTalonarioCobranzaRepository, XubioUnidadMedidaFinalRepository, XubioProductoCompraRepository, XubioRelacionComprobanteRepository, XubioComprobantesAsociadosRepository, XubioPDFRepository
 } from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
@@ -24,8 +24,12 @@ import {
   GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase,
   GetMonedasUseCase, GetPaisesUseCase, GetProvinciasUseCase, GetLocalidadesUseCase, GetTasasIvaUseCase, GetActividadesEconomicasUseCase, GetUnidadesMedidaUseCase,
   GetAsientosManualesUseCase, GetAjustesStockUseCase, GetCentrosDeCostoUseCase, GetListasPrecioUseCase, GetCategoriasCuentaUseCase, GetCategoriasFiscalesUseCase, GetCircuitosContablesUseCase, GetIdentificacionesTributariasUseCase,
-  GetMiEmpresaUseCase, GetPercepcionesUseCase, GetRetencionesUseCase, GetSucursalesUseCase, GetTransportesUseCase, GetTalonariosUseCase, GetTalonariosCobranzaUseCase, GetUnidadesMedidaFinalUseCase, GetProductosCompraUseCase, GetRelacionComprobantesUseCase, GetComprobantesAsociadosUseCase
+  GetMiEmpresaUseCase, GetPercepcionesUseCase, GetRetencionesUseCase, GetSucursalesUseCase, GetTransportesUseCase, GetTalonariosUseCase, GetTalonariosCobranzaUseCase, GetUnidadesMedidaFinalUseCase, GetProductosCompraUseCase, GetRelacionComprobantesUseCase, GetComprobantesAsociadosUseCase, GetPDFUseCase
 } from "./application/use-cases/BatchUseCases.js";
+import {
+  GetClienteByIdUseCase, GetProductoByIdUseCase, GetFacturaByIdUseCase, GetProveedorByIdUseCase, GetStockByProductoIdUseCase,
+  GetFacturaCompraByIdUseCase, GetOrdenCompraByIdUseCase, GetPresupuestoByIdUseCase, GetAsientoManualByIdUseCase, GetAjusteStockByIdUseCase, GetListaPrecioByIdUseCase, GetCuentaContableByIdUseCase
+} from "./application/use-cases/GetByIdUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
@@ -39,8 +43,12 @@ async function main() {
   const registry = ToolRegistry.getInstance();
 
   // Helper to register tools easily
-  const registerTool = (name: string, useCase: any, description: string) => {
-    registry.register(name, { useCase, description });
+  const registerTool = (name: string, useCaseOrHandler: any, description?: string) => {
+    if (useCaseOrHandler.useCase) {
+      registry.register(name, useCaseOrHandler);
+    } else {
+      registry.register(name, { useCase: useCaseOrHandler, description: description! });
+    }
   };
 
   // REPOSITORIES & USE CASES (Bloque 1-6)
@@ -85,7 +93,59 @@ async function main() {
   registerTool("get_unidades_medida", new GetUnidadesMedidaFinalUseCase(new XubioUnidadMedidaFinalRepository(authService)), "Obtener el listado de unidades de medida");
   registerTool("get_productos_compra", new GetProductosCompraUseCase(new XubioProductoCompraRepository(authService)), "Obtener el catálogo de productos de compra");
   registerTool("get_relacion_comprobantes", new GetRelacionComprobantesUseCase(new XubioRelacionComprobanteRepository(authService)), "Obtener relación entre facturas y notas de crédito");
-  registerTool("get_comprobantes_asociados", new GetComprobantesAsociadosUseCase(new XubioComprobantesAsociadosRepository(authService)), "Obtener comprobantes asociados");
+  registerTool("get_comprobantes_asociados", {
+    useCase: new GetComprobantesAsociadosUseCase(new XubioComprobantesAsociadosRepository(authService)),
+    description: "Obtener comprobantes asociados",
+    inputSchema: {
+      type: "object",
+      properties: {
+        clienteId: { type: "number", description: "ID del cliente" },
+        tipoComprobante: { type: "string", description: "Tipo de comprobante" }
+      },
+      required: ["clienteId", "tipoComprobante"]
+    }
+  });
+
+  registerTool("get_pdf_url", {
+    useCase: new GetPDFUseCase(new XubioPDFRepository(authService)),
+    description: "Obtener la URL del PDF de un comprobante",
+    inputSchema: {
+      type: "object",
+      properties: {
+        idtransaccion: { type: "number", description: "ID de la transacción" },
+        tipoimpresion: { type: "number", description: "Tipo de impresión (ej. 1)" }
+      },
+      required: ["idtransaccion", "tipoimpresion"]
+    }
+  });
+
+  // GET BY ID TOOLS
+  const registerByIdTool = (name: string, useCase: any, description: string, idName: string = "id") => {
+    registerTool(name, {
+      useCase,
+      description,
+      inputSchema: {
+        type: "object",
+        properties: {
+          [idName]: { type: "number", description: `ID del ${idName.replace("Id", "")}` }
+        },
+        required: [idName]
+      }
+    });
+  };
+
+  registerByIdTool("get_cliente_por_id", new GetClienteByIdUseCase(new XubioClienteRepository(authService)), "Obtener un cliente por su ID");
+  registerByIdTool("get_producto_por_id", new GetProductoByIdUseCase(new XubioProductoRepository(authService)), "Obtener un producto por su ID");
+  registerByIdTool("get_factura_por_id", new GetFacturaByIdUseCase(new XubioFacturaRepository(authService)), "Obtener una factura de venta por su ID");
+  registerByIdTool("get_proveedor_por_id", new GetProveedorByIdUseCase(new XubioProveedorRepository(authService)), "Obtener un proveedor por su ID");
+  registerByIdTool("get_stock_por_producto_id", new GetStockByProductoIdUseCase(new XubioStockRepository(authService)), "Obtener el stock de un producto por su ID", "productoId");
+  registerByIdTool("get_factura_compra_por_id", new GetFacturaCompraByIdUseCase(new XubioFacturaCompraRepository(authService)), "Obtener una factura de compra por su ID");
+  registerByIdTool("get_orden_compra_por_id", new GetOrdenCompraByIdUseCase(new XubioOrdenCompraRepository(authService)), "Obtener una orden de compra por su ID");
+  registerByIdTool("get_presupuesto_por_id", new GetPresupuestoByIdUseCase(new XubioPresupuestoRepository(authService)), "Obtener un presupuesto por su ID");
+  registerByIdTool("get_asiento_manual_por_id", new GetAsientoManualByIdUseCase(new XubioAsientoManualRepository(authService)), "Obtener un asiento manual por su ID");
+  registerByIdTool("get_ajuste_stock_por_id", new GetAjusteStockByIdUseCase(new XubioAjusteStockRepository(authService)), "Obtener un ajuste de stock por su ID");
+  registerByIdTool("get_lista_precio_por_id", new GetListaPrecioByIdUseCase(new XubioListaPrecioRepository(authService)), "Obtener una lista de precio por su ID");
+  registerByIdTool("get_cuenta_contable_por_id", new GetCuentaContableByIdUseCase(new XubioCuentaContableRepository(authService)), "Obtener una cuenta contable por su ID");
 
   // Presentation (MCP)
   const mcpServer = new McpServer();

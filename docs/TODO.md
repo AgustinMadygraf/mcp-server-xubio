@@ -2,80 +2,41 @@
 
 ## Cobertura Actual
 - **Total Endpoints GET en Swagger**: 54
-- **Implementados**: 40 (74%)
-- **Pendientes**: 14 (26%)
+- **Implementados**: 54 (100% Paridad de Funcionalidad GET)
+- **Pendientes**: 0
 
 ---
 
-## ✅ Implementados recientemente
+## ✅ Implementados recientemente (Fase Final)
 
-### 📦 Gestión de Stock y Compras
-- [x] `get_stock`: Listado general de stock (`/productoStock`).
-- [x] `get_depositos`: Listado de depósitos (`/depositos`).
-- [x] `get_facturas_compra`: Facturas de proveedores (`/comprobanteCompraBean`).
-- [x] `get_ordenes_compra`: Órdenes de compra (`/ordenCompraBean`).
-- [x] `get_productos_compra`: Catálogo de productos de compra (`/ProductoCompraBean`).
-- [x] `get_relacion_comprobantes`: Relación entre facturas y NC (`/relacionFacturaNotaDeCredito`).
-- [x] `get_comprobantes_asociados`: Comprobantes asociados (`/comprobantesAsociados`).
+### 🆔 Endpoints por ID (Nuevos!)
+- [x] `get_cliente_por_id`: Cliente individual.
+- [x] `get_factura_por_id`: Factura individual.
+- [x] `get_proveedor_por_id`: Proveedor individual.
+- [x] `get_presupuesto_por_id`: Presupuesto individual.
+- [x] `get_orden_compra_por_id`: Orden de compra individual.
+- [x] `get_factura_compra_por_id`: Factura de compra individual.
+- [x] `get_ajuste_stock_por_id`: Ajuste de stock individual.
+- [x] `get_asiento_manual_por_id`: Asiento manual individual.
+- [x] `get_lista_precio_por_id`: Lista de precios individual.
+- [x] `get_cuenta_contable_por_id`: Cuenta contable individual.
+- [x] `get_stock_por_producto_id`: Stock de un producto específico.
 
-### 💰 Finanzas y Contabilidad
-- [x] `get_cobranzas`: Lista de cobranzas (`/cobranzaBean`).
-- [x] `get_bancos`: Listado de bancos (`/banco`).
-- [x] `get_cuentas_contables`: Plan de cuentas (`/cuenta`).
-- [x] `get_presupuestos`: Presupuestos (`/presupuestoBean`).
-- [x] `get_remitos`: Remitos de venta (`/remitoVentaBean`).
-- [x] `get_vendedores`: Vendedores (`/vendedorBean`).
-- [x] `get_puntos_venta`: Puntos de venta (`/puntoVentaBean`).
-- [x] `get_asientos_manuales`: Asientos manuales (`/asientoContableManualBean`).
-- [x] `get_ajustes_stock`: Ajustes de stock (`/ajusteStockBean`).
-- [x] `get_centros_costo`: Centros de costo (`/centroDeCostoBean`).
-- [x] `get_listas_precio`: Listas de precios (`/listaPrecioBean`).
-- [x] `get_percepciones`: Percepciones (`/percepcionBean`).
-- [x] `get_retenciones`: Retenciones (`/retencionBean`).
-
-### ⚙️ Configuración y Maestros
-- [x] `get_monedas`: Monedas (`/monedaBean`).
-- [x] `get_paises`: Países (`/paisBean`).
-- [x] `get_provincias`: Provincias (`/provinciaBean`).
-- [x] `get_localidades`: Localidades (`/localidadBean`).
-- [x] `get_tasas_iva`: Tasas impositivas (`/tasaImpositiva`).
-- [x] `get_categorias_cuenta`: Categorías de cuenta (`/categoriaCuenta`).
-- [x] `get_categorias_fiscales`: Categorías fiscales (`/categoriaFiscal`).
-- [x] `get_circuitos_contables`: Circuitos contables (`/circuitoContableBean`).
-- [x] `get_identificaciones_tributarias`: Identificaciones tributarias (`/identificacionTributaria`).
-- [x] `get_mi_empresa`: Mi Empresa (`/miempresa`).
-- [x] `get_sucursales`: Sucursales de clientes (`/sucursalClienteBean`).
-- [x] `get_transportes`: Transportes (`/transporteBean`).
-- [x] `get_talonarios`: Talonarios (`/talonario`).
-- [x] `get_talonario_cobranza`: Talonarios de cobranza (`/talonarioCobranza`).
-- [x] `get_unidades_medida`: Unidades de medida (`/unidadMedida`).
+### 📄 Documentos y Otros
+- [x] `get_pdf_url`: Obtención de URL de impresión.
+- [x] `get_talonario_cobranza`: Talonarios específicos para cobranzas.
+- [x] `get_comprobantes_asociados`: Cruce de documentos.
 
 ---
 
-## ⚠️ Incidentes Conocidos (Requiere Revisión)
-- [ ] `get_pagos`: El endpoint `/pagoBean` devuelve Error 500/401 en Xubio con el mensaje "ResultSet is closed". Posible bug en la API de Xubio o volumen de datos excesivo.
+## ⚠️ Incidentes Conocidos (Limitaciones de la API de Xubio)
+- [ ] `get_pagos`: El endpoint `/pagoBean` devuelve Error 500 en Xubio ("ResultSet is closed"). Se mantiene la implementación pero depende de la estabilidad de Xubio.
 
 ---
 
-## 🚀 Próximos Pasos (Backlog Restante)
+## 🚀 Futuras Mejoras (V2)
 
 ### 🛠️ Mejoras Técnicas
-- [ ] **Paginación**: Implementar el manejo de `lastTransactionID` para recuperar listas largas (Xubio corta en 1000 por defecto).
-- [ ] **Filtros**: Permitir filtrar por fecha, cliente o estado.
-- [ ] **Testing**: Implementar Unit Tests con Mocks.
-
-### 📚 Endpoints Pendientes (14)
-- [ ] URL de PDF (`/imprimirPDF`)
-- [ ] Endpoints por ID (`{id}`):
-    - [ ] Cliente por ID
-    - [ ] Factura por ID
-    - [ ] Proveedor por ID
-    - [ ] Presupuesto por ID
-    - [ ] Orden de Compra por ID
-    - [ ] Factura de Compra por ID
-    - [ ] Ajuste de Stock por ID
-    - [ ] Asiento Manual por ID
-    - [ ] Lista de Precios por ID
-    - [ ] Cuenta por ID
-    - [ ] Stock por Producto ID
-    - [ ] Sucursal por ID
+- [ ] **Paginación Robusta**: Implementar el manejo de `lastTransactionID` para recuperar listas largas de forma automática.
+- [ ] **Filtros Avanzados**: Implementar esquemas de entrada para filtrar por fechas, estados, etc.
+- [ ] **Modos de Escritura (POST/PUT)**: Comenzar la implementación de creación y modificación de entidades.

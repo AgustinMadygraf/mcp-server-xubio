@@ -3,7 +3,7 @@ import { ICobranzaRepository } from "../../domain/repositories/ICobranzaReposito
 import { Cobranza } from "../../domain/entities/Cobranza.js";
 
 export class XubioCobranzaRepository extends XubioBaseRepository implements ICobranzaRepository {
-  async findAll(): Promise<Cobranza[]> {
-    return await this.get("cobranzaBean");
+  async findAll(params?: any): Promise<Cobranza[]> {
+    return await this.get("cobranzaBean", params);
   }
 }
