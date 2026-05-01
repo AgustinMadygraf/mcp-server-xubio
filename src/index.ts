@@ -15,12 +15,13 @@ import { GetStockUseCase } from "./application/use-cases/GetStockUseCase.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
+import { ToolRegistry } from "./infrastructure/mcp/ToolRegistry.js";
 
 async function bootstrap() {
   const config = validateConfig();
 
   // Infrastructure
-  const authService = new XubioAuthService(config.XUBIO_CLIENT_ID, config.XUBIO_SECRET_ID);
+  const authService = new XubioAuthService(config.clientId, config.secretId);
   
   const clienteRepo = new XubioClienteRepository(authService);
   const productoRepo = new XubioProductoRepository(authService);
@@ -28,21 +29,43 @@ async function bootstrap() {
   const proveedorRepo = new XubioProveedorRepository(authService);
   const stockRepo = new XubioStockRepository(authService);
 
-  // Application
+  // Application (Use Cases)
   const getClientesUseCase = new GetClientesUseCase(clienteRepo);
   const getProductosUseCase = new GetProductosUseCase(productoRepo);
   const getFacturasUseCase = new GetFacturasUseCase(facturaRepo);
   const getProveedoresUseCase = new GetProveedoresUseCase(proveedorRepo);
   const getStockUseCase = new GetStockUseCase(stockRepo);
 
+  // Register Tools
+  const registry = ToolRegistry.getInstance();
+  
+  registry.register("get_clientes", {
+    useCase: getClientesUseCase,
+    description: "Obtener la lista de clientes de Xubio",
+  });
+  
+  registry.register("get_productos", {
+    useCase: getProductosUseCase,
+    description: "Obtener la lista de productos de venta de Xubio",
+  });
+  
+  registry.register("get_facturas", {
+    useCase: getFacturasUseCase,
+    description: "Obtener la lista de facturas de venta de Xubio",
+  });
+  
+  registry.register("get_proveedores", {
+    useCase: getProveedoresUseCase,
+    description: "Obtener la lista de proveedores de Xubio",
+  });
+  
+  registry.register("get_stock", {
+    useCase: getStockUseCase,
+    description: "Obtener el listado de stock actual de los productos de Xubio",
+  });
+
   // Presentation (MCP)
-  const mcpServer = new McpServer(
-    getClientesUseCase,
-    getProductosUseCase,
-    getFacturasUseCase,
-    getProveedoresUseCase,
-    getStockUseCase
-  );
+  const mcpServer = new McpServer();
 
   await mcpServer.run().catch((error) => {
     console.error("Fatal error:", error);

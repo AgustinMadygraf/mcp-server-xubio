@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { XubioAuthService } from "./XubioAuthService.js";
+import { attachLogging } from "./AxiosLoggingInterceptor.js";
 
 /**
  * Referencias oficiales de la API: 
@@ -21,18 +22,14 @@ export abstract class XubioBaseRepository {
   }
 
   private setupInterceptors() {
+    // Adjuntar logging centralizado
+    attachLogging(this.axiosInstance, "[Xubio]");
+
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
         
-        // Log detallado del error para diagnóstico (Incidente 20260430)
-        if (error.response) {
-          console.error(`[Auth] Error API Xubio: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
-        } else {
-          console.error(`[Auth] Error de Red/Conexión: ${error.message}`);
-        }
-
         if (
           error.response?.data?.error === "invalid_token" &&
           error.response?.data?.error_description === "token died" &&
