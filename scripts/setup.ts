@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const SERVER_NAME = "xubio";
 const PROJECT_ROOT = process.cwd();
