@@ -73,6 +73,7 @@ async function main() {
   registerTool("get_provincias", new GetProvinciasUseCase(new XubioProvinciaRepository(authService)), "Obtener el listado de provincias");
   registerTool("get_localidades", new GetLocalidadesUseCase(new XubioLocalidadRepository(authService)), "Obtener el listado de localidades");
   registerTool("get_tasas_iva", new GetTasasIvaUseCase(new XubioTasaIvaRepository(authService)), "Obtener el listado de tasas de IVA");
+  registerTool("get_actividades_economicas", new GetActividadesEconomicasUseCase(new XubioActividadEconomicaRepository(authService)), "Obtener el listado de actividades económicas");
   registerTool("get_asientos_manuales", new GetAsientosManualesUseCase(new XubioAsientoManualRepository(authService)), "Obtener el listado de asientos contables manuales");
   registerTool("get_ajustes_stock", new GetAjustesStockUseCase(new XubioAjusteStockRepository(authService)), "Obtener el listado de ajustes de stock");
   registerTool("get_centros_costo", new GetCentrosDeCostoUseCase(new XubioCentroDeCostoRepository(authService)), "Obtener el listado de centros de costo");

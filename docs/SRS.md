@@ -8,7 +8,7 @@ El servidor actúa como un puente entre el protocolo MCP y la API REST de Xubio 
 
 ## 3. Requisitos Funcionales
 ### 3.1 Consultas de Datos (Lectura Total)
-- El sistema implementa **39 herramientas de consulta** que cubren:
+- El sistema implementa **54 herramientas de consulta** que cubren:
     - Ventas (Facturas, Clientes, Presupuestos, Remitos, Vendedores, Puntos de Venta).
     - Compras (Facturas de Compra, Proveedores, Órdenes de Compra).
     - Stock (Existencias, Depósitos, Ajustes).
