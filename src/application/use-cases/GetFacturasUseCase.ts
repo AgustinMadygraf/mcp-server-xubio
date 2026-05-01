@@ -1,0 +1,1 @@
+import { IFacturaRepository } from "../../domain/repositories/IFacturaRepository.js"; export class GetFacturasUseCase { constructor(private repository: IFacturaRepository) {} execute() { return this.repository.findAll(); } }

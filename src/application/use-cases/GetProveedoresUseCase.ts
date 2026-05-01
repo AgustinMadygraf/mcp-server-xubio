@@ -1,0 +1,1 @@
+import { IProveedorRepository } from "../../domain/repositories/IProveedorRepository.js"; export class GetProveedoresUseCase { constructor(private repository: IProveedorRepository) {} execute() { return this.repository.findAll(); } }

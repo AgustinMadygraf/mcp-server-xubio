@@ -1,0 +1,1 @@
+import { IProductoRepository } from "../../domain/repositories/IProductoRepository.js"; export class GetProductosUseCase { constructor(private repository: IProductoRepository) {} execute() { return this.repository.findAll(); } }

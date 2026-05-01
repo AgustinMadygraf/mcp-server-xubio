@@ -7,11 +7,19 @@ import {
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { GetClientesUseCase } from "../../application/use-cases/GetClientesUseCase.js";
+import { GetProductosUseCase } from "../../application/use-cases/GetProductosUseCase.js";
+import { GetFacturasUseCase } from "../../application/use-cases/GetFacturasUseCase.js";
+import { GetProveedoresUseCase } from "../../application/use-cases/GetProveedoresUseCase.js";
 
 export class McpServer {
   private server: Server;
 
-  constructor(private getClientesUseCase: GetClientesUseCase) {
+  constructor(
+    private getClientesUseCase: GetClientesUseCase,
+    private getProductosUseCase: GetProductosUseCase,
+    private getFacturasUseCase: GetFacturasUseCase,
+    private getProveedoresUseCase: GetProveedoresUseCase
+  ) {
     this.server = new Server(
       { name: "xubio-mcp-server", version: "1.0.0" },
       { capabilities: { tools: {} } }
@@ -26,7 +34,22 @@ export class McpServer {
       tools: [
         {
           name: "get_clientes",
-          description: "Obtener la lista de clientes de Xubio (Solo Lectura)",
+          description: "Obtener la lista de clientes de Xubio",
+          inputSchema: { type: "object", properties: {} },
+        },
+        {
+          name: "get_productos",
+          description: "Obtener la lista de productos de Xubio",
+          inputSchema: { type: "object", properties: {} },
+        },
+        {
+          name: "get_facturas",
+          description: "Obtener la lista de facturas de venta de Xubio",
+          inputSchema: { type: "object", properties: {} },
+        },
+        {
+          name: "get_proveedores",
+          description: "Obtener la lista de proveedores de Xubio",
           inputSchema: { type: "object", properties: {} },
         },
       ],
@@ -35,22 +58,28 @@ export class McpServer {
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       switch (request.params.name) {
         case "get_clientes":
-          return await this.handleGetClientes();
+          return await this.handleRequest(() => this.getClientesUseCase.execute());
+        case "get_productos":
+          return await this.handleRequest(() => this.getProductosUseCase.execute());
+        case "get_facturas":
+          return await this.handleRequest(() => this.getFacturasUseCase.execute());
+        case "get_proveedores":
+          return await this.handleRequest(() => this.getProveedoresUseCase.execute());
         default:
           throw new McpError(ErrorCode.MethodNotFound, `Herramienta desconocida: ${request.params.name}`);
       }
     });
   }
 
-  private async handleGetClientes() {
+  private async handleRequest(action: () => Promise<any>) {
     try {
-      const clientes = await this.getClientesUseCase.execute();
+      const data = await action();
       return {
-        content: [{ type: "text", text: JSON.stringify(clientes, null, 2) }],
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
       };
     } catch (error: any) {
       return {
-        content: [{ type: "text", text: `Error al obtener clientes: ${error.message}` }],
+        content: [{ type: "text", text: `Error: ${error.message}` }],
         isError: true,
       };
     }
