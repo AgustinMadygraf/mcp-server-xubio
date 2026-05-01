@@ -39,9 +39,19 @@ XUBIO_CLIENT_ID=tu_client_id
 XUBIO_SECRET_ID=tu_secret_id
 ```
 
-### 2. Configuración MCP
+### 2. Configuración Automática (Recomendado)
 
-Para integrar el servidor con tu cliente MCP (como Antigravity o Claude Desktop), añade lo siguiente a tu archivo de configuración (ej: `mcp_config.json`):
+Si usas clientes como **Antigravity**, **Claude Desktop** o **Claude Code**, puedes configurar el servidor automáticamente ejecutando:
+
+```bash
+npm run setup
+```
+
+Este script detectará tus clientes MCP instalados y añadirá el servidor con la ruta correcta de tu sistema.
+
+### 3. Configuración Manual MCP
+
+Si prefieres hacerlo manualmente, añade lo siguiente a tu archivo de configuración (ej: `mcp_config.json`):
 
 ```json
 {
@@ -69,4 +79,5 @@ Para integrar el servidor con tu cliente MCP (como Antigravity o Claude Desktop)
 
 - [Arquitectura](docs/architecture.md)
 - [Autenticación](docs/authentication.md)
+- [Depuración](docs/debugging.md)
 - [Herramientas](docs/tools.md)
