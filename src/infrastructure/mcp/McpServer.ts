@@ -74,10 +74,12 @@ export class McpServer {
   private async handleRequest(action: () => Promise<any>) {
     try {
       const data = await action();
+      console.error(`[MCP] Petición procesada exitosamente. Registros: ${Array.isArray(data) ? data.length : 1}`);
       return {
         content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
       };
     } catch (error: any) {
+      console.error(`[MCP] Error procesando petición: ${error.message}`);
       return {
         content: [{ type: "text", text: `Error: ${error.message}` }],
         isError: true,
