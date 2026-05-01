@@ -6,4 +6,8 @@ export class XubioCobranzaRepository extends XubioBaseRepository implements ICob
   async findAll(params?: any): Promise<Cobranza[]> {
     return await this.get("cobranzaBean", params);
   }
+
+  async findById(id: number | string): Promise<any> {
+    return await this.getById("cobranzaBean", id);
+  }
 }
