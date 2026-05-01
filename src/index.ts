@@ -11,21 +11,14 @@ import { GetProductosUseCase } from "./application/use-cases/GetProductosUseCase
 import { GetFacturasUseCase } from "./application/use-cases/GetFacturasUseCase.js";
 import { GetProveedoresUseCase } from "./application/use-cases/GetProveedoresUseCase.js";
 
+import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
 
-dotenv.config();
-
 async function bootstrap() {
-  const clientId = process.env.XUBIO_CLIENT_ID;
-  const secretId = process.env.XUBIO_SECRET_ID;
-
-  if (!clientId || !secretId) {
-    console.error("Error: XUBIO_CLIENT_ID and XUBIO_SECRET_ID are required.");
-    process.exit(1);
-  }
+  const config = validateConfig();
 
   // Infrastructure
-  const authService = new XubioAuthService(clientId, secretId);
+  const authService = new XubioAuthService(config.XUBIO_CLIENT_ID, config.XUBIO_SECRET_ID);
   
   const clienteRepo = new XubioClienteRepository(authService);
   const productoRepo = new XubioProductoRepository(authService);
