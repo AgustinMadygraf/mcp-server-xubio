@@ -81,3 +81,8 @@ Si prefieres hacerlo manualmente, añade lo siguiente a tu archivo de configurac
 - [Autenticación](docs/authentication.md)
 - [Depuración](docs/debugging.md)
 - [Herramientas](docs/tools.md)
+
+## Referencias Oficiales
+
+- [Documentación de la API de Xubio](https://xubio.com/API/documentation/index.html#)
+- [Definición Swagger (JSON)](https://xubio.com/API/1.1/swagger.json)

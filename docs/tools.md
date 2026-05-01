@@ -1,5 +1,9 @@
 # Herramientas Disponibles
 
+Para más detalles sobre los campos y esquemas devueltos, consulta:
+- [Documentación Oficial de la API de Xubio](https://xubio.com/API/documentation/index.html#)
+- [Definición Swagger (JSON)](https://xubio.com/API/1.1/swagger.json)
+
 El servidor expone las siguientes herramientas a través del protocolo MCP:
 
 ### `get_clientes`

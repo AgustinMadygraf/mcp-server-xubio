@@ -1,6 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 import { XubioAuthService } from "./XubioAuthService.js";
 
+/**
+ * Referencias oficiales de la API: 
+ * - Docs: https://xubio.com/API/documentation/index.html#
+ * - Swagger: https://xubio.com/API/1.1/swagger.json
+ */
 const XUBIO_API_BASE = "https://xubio.com/API/1.1/";
 
 export abstract class XubioBaseRepository {
