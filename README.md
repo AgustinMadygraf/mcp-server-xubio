@@ -81,14 +81,23 @@ Este servidor expone las siguientes herramientas MCP organizadas por categorías
 - `get_ordenes_compra`: Obtiene las órdenes de compra emitidas.
 - `get_presupuestos`: Obtiene los presupuestos enviados.
 - `get_remitos`: Obtiene los remitos de venta.
+- `get_productos_compra`: Obtiene el catálogo de productos de compra.
+- `get_relacion_comprobantes`: Obtiene relación entre facturas y notas de crédito.
+- `get_comprobantes_asociados`: Obtiene comprobantes asociados a un cliente.
 
-### 💰 Finanzas y Stock
+### 💰 Finanzas y Contabilidad
 - `get_cobranzas`: Obtiene las cobranzas registradas.
 - `get_pagos`: Obtiene los pagos realizados (⚠️ Sujeto a errores de API Xubio).
 - `get_bancos`: Obtiene el listado de bancos configurados.
 - `get_cuentas_contables`: Obtiene el plan de cuentas.
 - `get_stock`: Obtiene el stock actual de productos.
 - `get_depositos`: Obtiene la lista de depósitos de mercadería.
+- `get_asientos_manuales`: Obtiene los asientos contables manuales.
+- `get_ajustes_stock`: Obtiene los ajustes de stock realizados.
+- `get_centros_costo`: Obtiene el listado de centros de costo.
+- `get_listas_precio`: Obtiene las listas de precios.
+- `get_percepciones`: Obtiene el listado de percepciones.
+- `get_retenciones`: Obtiene el listado de retenciones.
 
 ### ⚙️ Configuración y Maestros
 - `get_monedas`: Listado de monedas disponibles.
@@ -98,6 +107,15 @@ Este servidor expone las siguientes herramientas MCP organizadas por categorías
 - `get_tasas_iva`: Listado de alícuotas de IVA.
 - `get_vendedores`: Listado de vendedores configurados.
 - `get_puntos_venta`: Listado de puntos de venta activos.
+- `get_categorias_cuenta`: Categorías de cuentas contables.
+- `get_categorias_fiscales`: Categorías fiscales.
+- `get_circuitos_contables`: Circuitos contables configurados.
+- `get_identificaciones_tributarias`: Tipos de identificación tributaria.
+- `get_mi_empresa`: Datos de la empresa actual.
+- `get_sucursales`: Sucursales de clientes.
+- `get_transportes`: Listado de transportes.
+- `get_talonarios`: Talonarios configurados.
+- `get_unidades_medida`: Unidades de medida.
 
 ## Documentación Adicional
 

@@ -5,7 +5,7 @@ Para más detalles sobre los campos y esquemas devueltos, consulta:
 - [Definición Swagger (JSON)](https://xubio.com/API/1.1/swagger.json)
 
 > [!NOTE]
-> Actualmente cubrimos **4 de los 54** endpoints de lectura disponibles. Consulta el [TODO](TODO.md) para ver el listado completo de endpoints pendientes.
+> Actualmente cubrimos **39 de los 54** endpoints de lectura disponibles. Consulta el [TODO](TODO.md) para ver el listado completo de endpoints pendientes.
 
 El servidor expone las siguientes herramientas a través del protocolo MCP:
 
