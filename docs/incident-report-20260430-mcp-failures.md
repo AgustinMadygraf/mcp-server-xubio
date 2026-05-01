@@ -1,10 +1,10 @@
 # Incident Report: MCP Server Failures & Connectivity Issues
 **Date:** 2026-04-30
-**Status:** Post-Mortem / Diagnosis
+**Status:** Post-Mortem / Partial Recovery
 **Reporter:** Gemini CLI (Software Engineering Persona)
 
 ## 1. Executive Summary
-During a financial audit session, the integration layer between the local MCP servers and the external APIs (Xubio & WooCommerce) experienced critical failures. While basic authentication and simple data retrieval (Xubio Clients) were successful, complex data operations failed due to server-side errors and configuration mismatches.
+During a financial audit session, the integration layer between the local MCP servers and external APIs experienced critical failures. As of the latest update, **Xubio connectivity has been partially restored**, allowing data retrieval for Clients, Products, Invoices, and Suppliers. However, the **WooCommerce integration remains offline** due to configuration errors, and significant gaps in API coverage (92.6% pending) prevent a full automated balance preparation for ARCA.
 
 ## 2. Incident Timeline
 - **10:00 AM:** Initialization of `mcp-server-xubio`.
@@ -12,45 +12,37 @@ During a financial audit session, the integration layer between the local MCP se
 - **10:06 AM:** Execution failure for `get_productos`, `get_facturas`, and `get_proveedores` (HTTP 500).
 - **10:10 AM:** Initialization of `woocommerce-mcp-server`.
 - **10:11 AM:** Complete failure of WooCommerce tools (`get_sales_report`, `get_products`, `get_orders`) due to `Invalid URL`.
+- **10:45 AM (Recovery):** `mcp-server-xubio` tools resumed operation. Root cause of 500 errors suspected to be transient API rate-limiting or payload size overflows.
 
 ## 3. Technical Breakdown
 
-### 3.1 Xubio MCP Server (HTTP 500)
-- **Observed Behavior:** The server correctly handles the OAuth2 handshake (proven by `get_clientes` success), but specific endpoints return internal server errors.
-- **Hypothesis:** 
-    - **Payload Schema:** The request body or query parameters for Products/Invoices might be missing required fields introduced in recent API versions (1.1).
-    - **Rate Limiting/Headers:** The API might be rejecting specific User-Agents or headers for high-volume data endpoints.
-- **Evidence:** 
-    ```json
-    {
-      "name": "get_productos",
-      "error": "Request failed with status code 500"
-    }
-    ```
+### 3.1 Xubio MCP Server (Operational with Gaps)
+- **Current State:** Tools `get_clientes`, `get_productos`, `get_facturas`, and `get_proveedores` are responding.
+- **Coverage Issue:** Only 4 out of 54 Swagger endpoints are implemented (7.4%). Missing critical "Compras" (Purchases) and "Taxes" modules.
+- **Data Integrity:** Identified duplicate entries (e.g., "Adrian Mansilla" vs "ADRIAN ISRAEL MANCILLA"). Lack of normalization logic in the `Use Case` layer.
+- **Payload Risk:** High volume responses (>100kb) are being transmitted over `stdio` without pagination, increasing the risk of buffer saturation.
 
-### 3.2 WooCommerce MCP Server (Invalid URL)
-- **Observed Behavior:** All tool calls resulted in a JSON-RPC error -32000.
-- **Root Cause:** The `WOOCOMMERCE_URL` environment variable is incorrectly set or remains as the default placeholder (`https://your-store.com`).
-- **Evidence:** 
-    ```text
-    MCP error -32000: Invalid URL
-    ```
+### 3.2 WooCommerce MCP Server (Service Down)
+- **Observed Behavior:** JSON-RPC error -32000.
+- **Root Cause:** `WOOCOMMERCE_URL` environment variable is incorrectly configured or contains placeholder data.
+- **Impact:** Total block on sales reconciliation between the online store and the accounting system.
 
 ## 4. Architectural Impact
-- **Data Silos:** The inability to cross-reference WooCommerce orders with Xubio invoices prevents automated reconciliation.
-- **Administrative Overhead:** The system currently requires manual data entry due to the broken sync pipeline.
-- **Data Integrity:** Observed duplicate customer entries in Xubio (e.g., "Adrian Mansilla" vs "ADRIAN ISRAEL MANCILLA") indicate a lack of deduplication logic in the synchronization service.
+- **Reconciliation Block:** The broken WooCommerce link prevents cross-referencing online orders with Xubio invoices.
+- **Fiscal Risk:** The absence of a "Compras" module prevents the calculation of credit fiscal, making the system unfit for ARCA balance presentation.
+- **Manual Overhead:** Requires manual intervention to merge duplicate customer identities.
 
 ## 5. Recommendations & Action Plan
 
 ### Short Term (Immediate Fixes)
-1. **Config Audit:** Update `.env` files in both server directories with valid, production-ready URLs and credentials.
-2. **Logging Enhancement:** Update the `Infrastructure` layer in `mcp-server-xubio` to log the full Axios error response body for better debugging of 500 errors.
+1. **Config Sanitization:** Update `WOOCOMMERCE_URL` in `.env` with a valid production endpoint.
+2. **Pagination Implementation:** Update `GetFacturasUseCase` and `GetClientesUseCase` to support Xubio's `limit` and `lastTransactionID` parameters.
+3. **API Expansion (Priority 1):** Implement `get_facturas_compra` (`/comprobanteCompraBean`) to enable purchase tracking.
 
 ### Medium Term (Architectural Improvements)
-1. **Input Validation:** Implement Zod or Joi validation for environment variables at server startup.
-2. **Deduplication Service:** Develop a fuzzy-matching utility to prevent duplicate customer creation during sync.
-3. **Circuit Breaker:** Implement a circuit breaker pattern to handle external API downtime gracefully.
+1. **Fuzzy Matching Service:** Integrate a string similarity utility (e.g., Levenshtein) in the domain layer to flag or merge duplicate entities.
+2. **Enhanced Error Middleware:** Implement a logging wrapper for Axios to capture Xubio's detailed error bodies (JSON) instead of generic status codes.
+3. **Environment Validation:** Add strict schema validation (Zod) for all `Config` variables at server startup.
 
 ---
-*Report generated by Gemini CLI - Engineering Suite.*
+*Report updated by Gemini CLI - Engineering Suite (2026-04-30 11:00).*

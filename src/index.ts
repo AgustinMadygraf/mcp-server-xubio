@@ -5,11 +5,13 @@ import { XubioClienteRepository } from "./infrastructure/api/XubioClienteReposit
 import { XubioProductoRepository } from "./infrastructure/api/XubioProductoRepository.js";
 import { XubioFacturaRepository } from "./infrastructure/api/XubioFacturaRepository.js";
 import { XubioProveedorRepository } from "./infrastructure/api/XubioProveedorRepository.js";
+import { XubioStockRepository } from "./infrastructure/api/XubioStockRepository.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
 import { GetProductosUseCase } from "./application/use-cases/GetProductosUseCase.js";
 import { GetFacturasUseCase } from "./application/use-cases/GetFacturasUseCase.js";
 import { GetProveedoresUseCase } from "./application/use-cases/GetProveedoresUseCase.js";
+import { GetStockUseCase } from "./application/use-cases/GetStockUseCase.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
@@ -24,19 +26,22 @@ async function bootstrap() {
   const productoRepo = new XubioProductoRepository(authService);
   const facturaRepo = new XubioFacturaRepository(authService);
   const proveedorRepo = new XubioProveedorRepository(authService);
+  const stockRepo = new XubioStockRepository(authService);
 
   // Application
   const getClientesUseCase = new GetClientesUseCase(clienteRepo);
   const getProductosUseCase = new GetProductosUseCase(productoRepo);
   const getFacturasUseCase = new GetFacturasUseCase(facturaRepo);
   const getProveedoresUseCase = new GetProveedoresUseCase(proveedorRepo);
+  const getStockUseCase = new GetStockUseCase(stockRepo);
 
   // Presentation (MCP)
   const mcpServer = new McpServer(
     getClientesUseCase,
     getProductosUseCase,
     getFacturasUseCase,
-    getProveedoresUseCase
+    getProveedoresUseCase,
+    getStockUseCase
   );
 
   await mcpServer.run().catch((error) => {
