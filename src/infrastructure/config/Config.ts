@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 import { IConfigProvider } from "./IConfigProvider.js";
 
+process.env.DOTENV_CONFIG_QUIET = "true";
 dotenv.config();
 
 const envSchema = z.object({
