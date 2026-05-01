@@ -1,4 +1,8 @@
-import { IFacturaCompraRepository, IOrdenCompraRepository, IDepositoRepository, IPagoRepository, IBancoRepository, ICuentaContableRepository, IPresupuestoRepository, IRemitoRepository, IVendedorRepository, IPuntoVentaRepository } from "../../domain/repositories/IBatchRepositories.js";
+import { 
+  IFacturaCompraRepository, IOrdenCompraRepository, IDepositoRepository, IPagoRepository, IBancoRepository, ICuentaContableRepository, 
+  IPresupuestoRepository, IRemitoRepository, IVendedorRepository, IPuntoVentaRepository,
+  IMonedaRepository, IPaisRepository, IProvinciaRepository, ILocalidadRepository, ITasaIvaRepository, IActividadEconomicaRepository, IUnidadMedidaRepository
+} from "../../domain/repositories/IBatchRepositories.js";
 
 export class GetFacturasCompraUseCase {
   constructor(private repo: IFacturaCompraRepository) {}
@@ -47,5 +51,40 @@ export class GetVendedoresUseCase {
 
 export class GetPuntosVentaUseCase {
   constructor(private repo: IPuntoVentaRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetMonedasUseCase {
+  constructor(private repo: IMonedaRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetPaisesUseCase {
+  constructor(private repo: IPaisRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetProvinciasUseCase {
+  constructor(private repo: IProvinciaRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetLocalidadesUseCase {
+  constructor(private repo: ILocalidadRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetTasasIvaUseCase {
+  constructor(private repo: ITasaIvaRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetActividadesEconomicasUseCase {
+  constructor(private repo: IActividadEconomicaRepository) {}
+  async execute() { return await this.repo.findAll(); }
+}
+
+export class GetUnidadesMedidaUseCase {
+  constructor(private repo: IUnidadMedidaRepository) {}
   async execute() { return await this.repo.findAll(); }
 }

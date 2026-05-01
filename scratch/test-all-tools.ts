@@ -5,7 +5,11 @@ import { XubioFacturaRepository } from "../src/infrastructure/api/XubioFacturaRe
 import { XubioProveedorRepository } from "../src/infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "../src/infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "../src/infrastructure/api/XubioCobranzaRepository.js";
-import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository } from "../src/infrastructure/api/BatchXubioRepositories.js";
+import { 
+  XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, 
+  XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository,
+  XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository
+} from "../src/infrastructure/api/BatchXubioRepositories.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -30,6 +34,11 @@ async function runTests() {
     { name: "Remitos", repo: new XubioRemitoRepository(auth) },
     { name: "Vendedores", repo: new XubioVendedorRepository(auth) },
     { name: "Puntos Venta", repo: new XubioPuntoVentaRepository(auth) },
+    { name: "Monedas", repo: new XubioMonedaRepository(auth) },
+    { name: "Paises", repo: new XubioPaisRepository(auth) },
+    { name: "Provincias", repo: new XubioProvinciaRepository(auth) },
+    { name: "Localidades", repo: new XubioLocalidadRepository(auth) },
+    { name: "Tasas IVA", repo: new XubioTasaIvaRepository(auth) },
   ];
 
   console.log("🚀 Iniciando suite de pruebas de regresión...\n");

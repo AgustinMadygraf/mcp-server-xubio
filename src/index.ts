@@ -7,7 +7,11 @@ import { XubioFacturaRepository } from "./infrastructure/api/XubioFacturaReposit
 import { XubioProveedorRepository } from "./infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "./infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "./infrastructure/api/XubioCobranzaRepository.js";
-import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository } from "./infrastructure/api/BatchXubioRepositories.js";
+import { 
+  XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, 
+  XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository,
+  XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository
+} from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
 import { GetProductosUseCase } from "./application/use-cases/GetProductosUseCase.js";
@@ -15,7 +19,11 @@ import { GetFacturasUseCase } from "./application/use-cases/GetFacturasUseCase.j
 import { GetProveedoresUseCase } from "./application/use-cases/GetProveedoresUseCase.js";
 import { GetStockUseCase } from "./application/use-cases/GetStockUseCase.js";
 import { GetCobranzasUseCase } from "./application/use-cases/GetCobranzasUseCase.js";
-import { GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase, GetPagosUseCase, GetBancosUseCase, GetCuentasContablesUseCase, GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase } from "./application/use-cases/BatchUseCases.js";
+import { 
+  GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase, GetPagosUseCase, GetBancosUseCase, GetCuentasContablesUseCase, 
+  GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase,
+  GetMonedasUseCase, GetPaisesUseCase, GetProvinciasUseCase, GetLocalidadesUseCase, GetTasasIvaUseCase, GetActividadesEconomicasUseCase, GetUnidadesMedidaUseCase
+} from "./application/use-cases/BatchUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
@@ -43,6 +51,11 @@ async function bootstrap() {
   const remitoRepo = new XubioRemitoRepository(authService);
   const vendedorRepo = new XubioVendedorRepository(authService);
   const puntoVentaRepo = new XubioPuntoVentaRepository(authService);
+  const monedaRepo = new XubioMonedaRepository(authService);
+  const paisRepo = new XubioPaisRepository(authService);
+  const provinciaRepo = new XubioProvinciaRepository(authService);
+  const localidadRepo = new XubioLocalidadRepository(authService);
+  const tasaIvaRepo = new XubioTasaIvaRepository(authService);
 
   // Application (Use Cases)
   const getClientesUseCase = new GetClientesUseCase(clienteRepo);
@@ -61,6 +74,11 @@ async function bootstrap() {
   const getRemitosUseCase = new GetRemitosUseCase(remitoRepo);
   const getVendedoresUseCase = new GetVendedoresUseCase(vendedorRepo);
   const getPuntosVentaUseCase = new GetPuntosVentaUseCase(puntoVentaRepo);
+  const getMonedasUseCase = new GetMonedasUseCase(monedaRepo);
+  const getPaisesUseCase = new GetPaisesUseCase(paisRepo);
+  const getProvinciasUseCase = new GetProvinciasUseCase(provinciaRepo);
+  const getLocalidadesUseCase = new GetLocalidadesUseCase(localidadRepo);
+  const getTasasIvaUseCase = new GetTasasIvaUseCase(tasaIvaRepo);
 
   // Register Tools
   const registry = ToolRegistry.getInstance();
@@ -143,6 +161,31 @@ async function bootstrap() {
   registry.register("get_puntos_venta", {
     useCase: getPuntosVentaUseCase,
     description: "Obtener el listado de puntos de venta de Xubio",
+  });
+
+  registry.register("get_monedas", {
+    useCase: getMonedasUseCase,
+    description: "Obtener el listado de monedas de Xubio",
+  });
+
+  registry.register("get_paises", {
+    useCase: getPaisesUseCase,
+    description: "Obtener el listado de países de Xubio",
+  });
+
+  registry.register("get_provincias", {
+    useCase: getProvinciasUseCase,
+    description: "Obtener el listado de provincias de Xubio",
+  });
+
+  registry.register("get_localidades", {
+    useCase: getLocalidadesUseCase,
+    description: "Obtener el listado de localidades de Xubio",
+  });
+
+  registry.register("get_tasas_iva", {
+    useCase: getTasasIvaUseCase,
+    description: "Obtener el listado de tasas de IVA de Xubio",
   });
 
   // Presentation (MCP)

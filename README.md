@@ -70,10 +70,34 @@ Si prefieres hacerlo manualmente, añade lo siguiente a tu archivo de configurac
 
 ## Herramientas (Tools)
 
+Este servidor expone las siguientes herramientas MCP organizadas por categorías:
+
+### 📦 Ventas y Compras
 - `get_clientes`: Obtiene la lista de clientes.
-- `get_productos`: Obtiene el catálogo de productos.
-- `get_facturas`: Obtiene las facturas de venta.
+- `get_productos`: Obtiene el catálogo de productos de venta.
+- `get_facturas`: Obtiene las facturas de venta realizadas.
 - `get_proveedores`: Obtiene la lista de proveedores.
+- `get_facturas_compra`: Obtiene las facturas de compra recibidas.
+- `get_ordenes_compra`: Obtiene las órdenes de compra emitidas.
+- `get_presupuestos`: Obtiene los presupuestos enviados.
+- `get_remitos`: Obtiene los remitos de venta.
+
+### 💰 Finanzas y Stock
+- `get_cobranzas`: Obtiene las cobranzas registradas.
+- `get_pagos`: Obtiene los pagos realizados (⚠️ Sujeto a errores de API Xubio).
+- `get_bancos`: Obtiene el listado de bancos configurados.
+- `get_cuentas_contables`: Obtiene el plan de cuentas.
+- `get_stock`: Obtiene el stock actual de productos.
+- `get_depositos`: Obtiene la lista de depósitos de mercadería.
+
+### ⚙️ Configuración y Maestros
+- `get_monedas`: Listado de monedas disponibles.
+- `get_paises`: Listado de países.
+- `get_provincias`: Listado de provincias.
+- `get_localidades`: Listado de localidades.
+- `get_tasas_iva`: Listado de alícuotas de IVA.
+- `get_vendedores`: Listado de vendedores configurados.
+- `get_puntos_venta`: Listado de puntos de venta activos.
 
 ## Documentación Adicional
 
