@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-import dotenv from "dotenv";
 import { XubioAuthService } from "./infrastructure/api/XubioAuthService.js";
 import { XubioClienteRepository } from "./infrastructure/api/XubioClienteRepository.js";
 import { XubioProductoRepository } from "./infrastructure/api/XubioProductoRepository.js";
@@ -10,7 +8,9 @@ import { XubioCobranzaRepository } from "./infrastructure/api/XubioCobranzaRepos
 import { 
   XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, 
   XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository,
-  XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository
+  XubioMonedaRepository, XubioPaisRepository, XubioProvinciaRepository, XubioLocalidadRepository, XubioTasaIvaRepository, XubioActividadEconomicaRepository, XubioUnidadMedidaRepository,
+  XubioAsientoManualRepository, XubioAjusteStockRepository, XubioCentroDeCostoRepository, XubioListaPrecioRepository, XubioCategoriaCuentaRepository, XubioCategoriaFiscalRepository, XubioCircuitoContableRepository, XubioIdentificacionTributariaRepository,
+  XubioMiEmpresaRepository, XubioPercepcionRepository, XubioRetencionRepository, XubioSucursalRepository, XubioTransporteRepository, XubioTalonarioRepository, XubioUnidadMedidaFinalRepository, XubioProductoCompraRepository, XubioRelacionComprobanteRepository, XubioComprobantesAsociadosRepository
 } from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
@@ -22,179 +22,79 @@ import { GetCobranzasUseCase } from "./application/use-cases/GetCobranzasUseCase
 import { 
   GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase, GetPagosUseCase, GetBancosUseCase, GetCuentasContablesUseCase, 
   GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase,
-  GetMonedasUseCase, GetPaisesUseCase, GetProvinciasUseCase, GetLocalidadesUseCase, GetTasasIvaUseCase, GetActividadesEconomicasUseCase, GetUnidadesMedidaUseCase
+  GetMonedasUseCase, GetPaisesUseCase, GetProvinciasUseCase, GetLocalidadesUseCase, GetTasasIvaUseCase, GetActividadesEconomicasUseCase, GetUnidadesMedidaUseCase,
+  GetAsientosManualesUseCase, GetAjustesStockUseCase, GetCentrosDeCostoUseCase, GetListasPrecioUseCase, GetCategoriasCuentaUseCase, GetCategoriasFiscalesUseCase, GetCircuitosContablesUseCase, GetIdentificacionesTributariasUseCase,
+  GetMiEmpresaUseCase, GetPercepcionesUseCase, GetRetencionesUseCase, GetSucursalesUseCase, GetTransportesUseCase, GetTalonariosUseCase, GetUnidadesMedidaFinalUseCase, GetProductosCompraUseCase, GetRelacionComprobantesUseCase, GetComprobantesAsociadosUseCase
 } from "./application/use-cases/BatchUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
 import { ToolRegistry } from "./infrastructure/mcp/ToolRegistry.js";
 
-async function bootstrap() {
+async function main() {
   const config = validateConfig();
 
   // Infrastructure
   const authService = new XubioAuthService(config.clientId, config.secretId);
-  
-  const clienteRepo = new XubioClienteRepository(authService);
-  const productoRepo = new XubioProductoRepository(authService);
-  const facturaRepo = new XubioFacturaRepository(authService);
-  const proveedorRepo = new XubioProveedorRepository(authService);
-  const stockRepo = new XubioStockRepository(authService);
-  const cobranzaRepo = new XubioCobranzaRepository(authService);
-  const facturaCompraRepo = new XubioFacturaCompraRepository(authService);
-  const ordenCompraRepo = new XubioOrdenCompraRepository(authService);
-  const depositoRepo = new XubioDepositoRepository(authService);
-  const pagoRepo = new XubioPagoRepository(authService);
-  const bancoRepo = new XubioBancoRepository(authService);
-  const cuentaContableRepo = new XubioCuentaContableRepository(authService);
-  const presupuestoRepo = new XubioPresupuestoRepository(authService);
-  const remitoRepo = new XubioRemitoRepository(authService);
-  const vendedorRepo = new XubioVendedorRepository(authService);
-  const puntoVentaRepo = new XubioPuntoVentaRepository(authService);
-  const monedaRepo = new XubioMonedaRepository(authService);
-  const paisRepo = new XubioPaisRepository(authService);
-  const provinciaRepo = new XubioProvinciaRepository(authService);
-  const localidadRepo = new XubioLocalidadRepository(authService);
-  const tasaIvaRepo = new XubioTasaIvaRepository(authService);
-
-  // Application (Use Cases)
-  const getClientesUseCase = new GetClientesUseCase(clienteRepo);
-  const getProductosUseCase = new GetProductosUseCase(productoRepo);
-  const getFacturasUseCase = new GetFacturasUseCase(facturaRepo);
-  const getProveedoresUseCase = new GetProveedoresUseCase(proveedorRepo);
-  const getStockUseCase = new GetStockUseCase(stockRepo);
-  const getCobranzasUseCase = new GetCobranzasUseCase(cobranzaRepo);
-  const getFacturasCompraUseCase = new GetFacturasCompraUseCase(facturaCompraRepo);
-  const getOrdenesCompraUseCase = new GetOrdenesCompraUseCase(ordenCompraRepo);
-  const getDepositosUseCase = new GetDepositosUseCase(depositoRepo);
-  const getPagosUseCase = new GetPagosUseCase(pagoRepo);
-  const getBancosUseCase = new GetBancosUseCase(bancoRepo);
-  const getCuentasContablesUseCase = new GetCuentasContablesUseCase(cuentaContableRepo);
-  const getPresupuestosUseCase = new GetPresupuestosUseCase(presupuestoRepo);
-  const getRemitosUseCase = new GetRemitosUseCase(remitoRepo);
-  const getVendedoresUseCase = new GetVendedoresUseCase(vendedorRepo);
-  const getPuntosVentaUseCase = new GetPuntosVentaUseCase(puntoVentaRepo);
-  const getMonedasUseCase = new GetMonedasUseCase(monedaRepo);
-  const getPaisesUseCase = new GetPaisesUseCase(paisRepo);
-  const getProvinciasUseCase = new GetProvinciasUseCase(provinciaRepo);
-  const getLocalidadesUseCase = new GetLocalidadesUseCase(localidadRepo);
-  const getTasasIvaUseCase = new GetTasasIvaUseCase(tasaIvaRepo);
-
-  // Register Tools
   const registry = ToolRegistry.getInstance();
+
+  // Helper to register tools easily
+  const registerTool = (name: string, useCase: any, description: string) => {
+    registry.register(name, { useCase, description });
+  };
+
+  // REPOSITORIES & USE CASES (Bloque 1-6)
+  registerTool("get_clientes", new GetClientesUseCase(new XubioClienteRepository(authService)), "Obtener la lista de clientes de Xubio");
+  registerTool("get_productos", new GetProductosUseCase(new XubioProductoRepository(authService)), "Obtener la lista de productos de venta de Xubio");
+  registerTool("get_facturas", new GetFacturasUseCase(new XubioFacturaRepository(authService)), "Obtener la lista de facturas de venta de Xubio");
+  registerTool("get_proveedores", new GetProveedoresUseCase(new XubioProveedorRepository(authService)), "Obtener la lista de proveedores de Xubio");
+  registerTool("get_stock", new GetStockUseCase(new XubioStockRepository(authService)), "Obtener el listado de stock actual");
+  registerTool("get_cobranzas", new GetCobranzasUseCase(new XubioCobranzaRepository(authService)), "Obtener el listado de cobranzas");
+  registerTool("get_facturas_compra", new GetFacturasCompraUseCase(new XubioFacturaCompraRepository(authService)), "Obtener el listado de facturas de compra");
+  registerTool("get_ordenes_compra", new GetOrdenesCompraUseCase(new XubioOrdenCompraRepository(authService)), "Obtener el listado de órdenes de compra");
+  registerTool("get_depositos", new GetDepositosUseCase(new XubioDepositoRepository(authService)), "Obtener el listado de depósitos");
+  registerTool("get_pagos", new GetPagosUseCase(new XubioPagoRepository(authService)), "Obtener el listado de pagos");
+  registerTool("get_bancos", new GetBancosUseCase(new XubioBancoRepository(authService)), "Obtener el listado de bancos");
+  registerTool("get_cuentas_contables", new GetCuentasContablesUseCase(new XubioCuentaContableRepository(authService)), "Obtener el listado de cuentas contables");
+  registerTool("get_presupuestos", new GetPresupuestosUseCase(new XubioPresupuestoRepository(authService)), "Obtener el listado de presupuestos");
+  registerTool("get_remitos", new GetRemitosUseCase(new XubioRemitoRepository(authService)), "Obtener el listado de remitos de venta");
+  registerTool("get_vendedores", new GetVendedoresUseCase(new XubioVendedorRepository(authService)), "Obtener el listado de vendedores");
+  registerTool("get_puntos_venta", new GetPuntosVentaUseCase(new XubioPuntoVentaRepository(authService)), "Obtener el listado de puntos de venta");
+  registerTool("get_monedas", new GetMonedasUseCase(new XubioMonedaRepository(authService)), "Obtener el listado de monedas");
+  registerTool("get_paises", new GetPaisesUseCase(new XubioPaisRepository(authService)), "Obtener el listado de países");
+  registerTool("get_provincias", new GetProvinciasUseCase(new XubioProvinciaRepository(authService)), "Obtener el listado de provincias");
+  registerTool("get_localidades", new GetLocalidadesUseCase(new XubioLocalidadRepository(authService)), "Obtener el listado de localidades");
+  registerTool("get_tasas_iva", new GetTasasIvaUseCase(new XubioTasaIvaRepository(authService)), "Obtener el listado de tasas de IVA");
+  registerTool("get_asientos_manuales", new GetAsientosManualesUseCase(new XubioAsientoManualRepository(authService)), "Obtener el listado de asientos contables manuales");
+  registerTool("get_ajustes_stock", new GetAjustesStockUseCase(new XubioAjusteStockRepository(authService)), "Obtener el listado de ajustes de stock");
+  registerTool("get_centros_costo", new GetCentrosDeCostoUseCase(new XubioCentroDeCostoRepository(authService)), "Obtener el listado de centros de costo");
+  registerTool("get_listas_precio", new GetListasPrecioUseCase(new XubioListaPrecioRepository(authService)), "Obtener el listado de listas de precios");
+  registerTool("get_categorias_cuenta", new GetCategoriasCuentaUseCase(new XubioCategoriaCuentaRepository(authService)), "Obtener el listado de categorías de cuenta");
+  registerTool("get_categorias_fiscales", new GetCategoriasFiscalesUseCase(new XubioCategoriaFiscalRepository(authService)), "Obtener el listado de categorías fiscales");
+  registerTool("get_circuitos_contables", new GetCircuitosContablesUseCase(new XubioCircuitoContableRepository(authService)), "Obtener el listado de circuitos contables");
+  registerTool("get_identificaciones_tributarias", new GetIdentificacionesTributariasUseCase(new XubioIdentificacionTributariaRepository(authService)), "Obtener el listado de identificaciones tributarias");
   
-  registry.register("get_clientes", {
-    useCase: getClientesUseCase,
-    description: "Obtener la lista de clientes de Xubio",
-  });
-  
-  registry.register("get_productos", {
-    useCase: getProductosUseCase,
-    description: "Obtener la lista de productos de venta de Xubio",
-  });
-  
-  registry.register("get_facturas", {
-    useCase: getFacturasUseCase,
-    description: "Obtener la lista de facturas de venta de Xubio",
-  });
-  
-  registry.register("get_proveedores", {
-    useCase: getProveedoresUseCase,
-    description: "Obtener la lista de proveedores de Xubio",
-  });
-  
-  registry.register("get_stock", {
-    useCase: getStockUseCase,
-    description: "Obtener el listado de stock actual de los productos de Xubio",
-  });
-
-  registry.register("get_cobranzas", {
-    useCase: getCobranzasUseCase,
-    description: "Obtener el listado de cobranzas de Xubio",
-  });
-
-  registry.register("get_facturas_compra", {
-    useCase: getFacturasCompraUseCase,
-    description: "Obtener el listado de facturas de compra de Xubio",
-  });
-
-  registry.register("get_ordenes_compra", {
-    useCase: getOrdenesCompraUseCase,
-    description: "Obtener el listado de órdenes de compra de Xubio",
-  });
-
-  registry.register("get_depositos", {
-    useCase: getDepositosUseCase,
-    description: "Obtener el listado de depósitos de Xubio",
-  });
-
-  registry.register("get_pagos", {
-    useCase: getPagosUseCase,
-    description: "Obtener el listado de pagos de Xubio",
-  });
-
-  registry.register("get_bancos", {
-    useCase: getBancosUseCase,
-    description: "Obtener el listado de bancos de Xubio",
-  });
-
-  registry.register("get_cuentas_contables", {
-    useCase: getCuentasContablesUseCase,
-    description: "Obtener el listado de cuentas contables de Xubio",
-  });
-
-  registry.register("get_presupuestos", {
-    useCase: getPresupuestosUseCase,
-    description: "Obtener el listado de presupuestos de Xubio",
-  });
-
-  registry.register("get_remitos", {
-    useCase: getRemitosUseCase,
-    description: "Obtener el listado de remitos de venta de Xubio",
-  });
-
-  registry.register("get_vendedores", {
-    useCase: getVendedoresUseCase,
-    description: "Obtener el listado de vendedores de Xubio",
-  });
-
-  registry.register("get_puntos_venta", {
-    useCase: getPuntosVentaUseCase,
-    description: "Obtener el listado de puntos de venta de Xubio",
-  });
-
-  registry.register("get_monedas", {
-    useCase: getMonedasUseCase,
-    description: "Obtener el listado de monedas de Xubio",
-  });
-
-  registry.register("get_paises", {
-    useCase: getPaisesUseCase,
-    description: "Obtener el listado de países de Xubio",
-  });
-
-  registry.register("get_provincias", {
-    useCase: getProvinciasUseCase,
-    description: "Obtener el listado de provincias de Xubio",
-  });
-
-  registry.register("get_localidades", {
-    useCase: getLocalidadesUseCase,
-    description: "Obtener el listado de localidades de Xubio",
-  });
-
-  registry.register("get_tasas_iva", {
-    useCase: getTasasIvaUseCase,
-    description: "Obtener el listado de tasas de IVA de Xubio",
-  });
+  // Bloque 6
+  registerTool("get_mi_empresa", new GetMiEmpresaUseCase(new XubioMiEmpresaRepository(authService)), "Obtener información de la empresa actual");
+  registerTool("get_percepciones", new GetPercepcionesUseCase(new XubioPercepcionRepository(authService)), "Obtener el listado de percepciones");
+  registerTool("get_retenciones", new GetRetencionesUseCase(new XubioRetencionRepository(authService)), "Obtener el listado de retenciones");
+  registerTool("get_sucursales", new GetSucursalesUseCase(new XubioSucursalRepository(authService)), "Obtener el listado de sucursales de clientes");
+  registerTool("get_transportes", new GetTransportesUseCase(new XubioTransporteRepository(authService)), "Obtener el listado de transportes");
+  registerTool("get_talonarios", new GetTalonariosUseCase(new XubioTalonarioRepository(authService)), "Obtener el listado de talonarios");
+  registerTool("get_unidades_medida", new GetUnidadesMedidaFinalUseCase(new XubioUnidadMedidaFinalRepository(authService)), "Obtener el listado de unidades de medida");
+  registerTool("get_productos_compra", new GetProductosCompraUseCase(new XubioProductoCompraRepository(authService)), "Obtener el catálogo de productos de compra");
+  registerTool("get_relacion_comprobantes", new GetRelacionComprobantesUseCase(new XubioRelacionComprobanteRepository(authService)), "Obtener relación entre facturas y notas de crédito");
+  registerTool("get_comprobantes_asociados", new GetComprobantesAsociadosUseCase(new XubioComprobantesAsociadosRepository(authService)), "Obtener comprobantes asociados");
 
   // Presentation (MCP)
   const mcpServer = new McpServer();
-
-  await mcpServer.run().catch((error) => {
-    console.error("Fatal error:", error);
+  mcpServer.run().catch((error) => {
+    console.error("Critical error in MCP Server:", error);
     process.exit(1);
   });
 }
 
-bootstrap();
+main().catch((error) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
+});

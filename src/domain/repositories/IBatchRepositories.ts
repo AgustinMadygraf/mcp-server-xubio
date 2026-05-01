@@ -9,6 +9,8 @@ import { Remito } from "../entities/Remito.js";
 import { Vendedor } from "../entities/Vendedor.js";
 import { PuntoVenta } from "../entities/PuntoVenta.js";
 import { Moneda, Pais, Provincia, Localidad, TasaIva, ActividadEconomica, UnidadMedida } from "../entities/ConfigEntities.js";
+import { AsientoManual, AjusteStock, CentroDeCosto, ListaPrecio, CategoriaCuenta, CategoriaFiscal, CircuitoContable, IdentificacionTributaria } from "../entities/AccountingEntities.js";
+import { MiEmpresa, Percepcion, Retencion, Sucursal, Transporte, Talonario, UnidadMedidaFinal, ProductoCompra, RelacionComprobante } from "../entities/MiscEntities.js";
 
 export interface IFacturaCompraRepository { findAll(): Promise<FacturaCompra[]>; }
 export interface IOrdenCompraRepository { findAll(): Promise<OrdenCompra[]>; }
@@ -27,3 +29,23 @@ export interface ILocalidadRepository { findAll(): Promise<Localidad[]>; }
 export interface ITasaIvaRepository { findAll(): Promise<TasaIva[]>; }
 export interface IActividadEconomicaRepository { findAll(): Promise<ActividadEconomica[]>; }
 export interface IUnidadMedidaRepository { findAll(): Promise<UnidadMedida[]>; }
+
+export interface IAsientoManualRepository { findAll(): Promise<AsientoManual[]>; }
+export interface IAjusteStockRepository { findAll(): Promise<AjusteStock[]>; }
+export interface ICentroDeCostoRepository { findAll(): Promise<CentroDeCosto[]>; }
+export interface IListaPrecioRepository { findAll(): Promise<ListaPrecio[]>; }
+export interface ICategoriaCuentaRepository { findAll(): Promise<CategoriaCuenta[]>; }
+export interface ICategoriaFiscalRepository { findAll(): Promise<CategoriaFiscal[]>; }
+export interface ICircuitoContableRepository { findAll(): Promise<CircuitoContable[]>; }
+export interface IIdentificacionTributariaRepository { findAll(): Promise<IdentificacionTributaria[]>; }
+
+export interface IMiEmpresaRepository { findAll(): Promise<MiEmpresa[]>; }
+export interface IPercepcionRepository { findAll(): Promise<Percepcion[]>; }
+export interface IRetencionRepository { findAll(): Promise<Retencion[]>; }
+export interface ISucursalRepository { findAll(): Promise<Sucursal[]>; }
+export interface ITransporteRepository { findAll(): Promise<Transporte[]>; }
+export interface ITalonarioRepository { findAll(): Promise<Talonario[]>; }
+export interface IUnidadMedidaFinalRepository { findAll(): Promise<UnidadMedidaFinal[]>; }
+export interface IProductoCompraRepository { findAll(): Promise<ProductoCompra[]>; }
+export interface IRelacionComprobanteRepository { findAll(): Promise<RelacionComprobante[]>; }
+export interface IComprobantesAsociadosRepository { findAll(): Promise<any[]>; }
