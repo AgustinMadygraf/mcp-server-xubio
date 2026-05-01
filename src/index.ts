@@ -7,7 +7,7 @@ import { XubioFacturaRepository } from "./infrastructure/api/XubioFacturaReposit
 import { XubioProveedorRepository } from "./infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "./infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "./infrastructure/api/XubioCobranzaRepository.js";
-import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository } from "./infrastructure/api/BatchXubioRepositories.js";
+import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository } from "./infrastructure/api/BatchXubioRepositories.js";
 
 import { GetClientesUseCase } from "./application/use-cases/GetClientesUseCase.js";
 import { GetProductosUseCase } from "./application/use-cases/GetProductosUseCase.js";
@@ -15,7 +15,7 @@ import { GetFacturasUseCase } from "./application/use-cases/GetFacturasUseCase.j
 import { GetProveedoresUseCase } from "./application/use-cases/GetProveedoresUseCase.js";
 import { GetStockUseCase } from "./application/use-cases/GetStockUseCase.js";
 import { GetCobranzasUseCase } from "./application/use-cases/GetCobranzasUseCase.js";
-import { GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase } from "./application/use-cases/BatchUseCases.js";
+import { GetFacturasCompraUseCase, GetOrdenesCompraUseCase, GetDepositosUseCase, GetPagosUseCase, GetBancosUseCase, GetCuentasContablesUseCase, GetPresupuestosUseCase, GetRemitosUseCase, GetVendedoresUseCase, GetPuntosVentaUseCase } from "./application/use-cases/BatchUseCases.js";
 
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
@@ -36,6 +36,13 @@ async function bootstrap() {
   const facturaCompraRepo = new XubioFacturaCompraRepository(authService);
   const ordenCompraRepo = new XubioOrdenCompraRepository(authService);
   const depositoRepo = new XubioDepositoRepository(authService);
+  const pagoRepo = new XubioPagoRepository(authService);
+  const bancoRepo = new XubioBancoRepository(authService);
+  const cuentaContableRepo = new XubioCuentaContableRepository(authService);
+  const presupuestoRepo = new XubioPresupuestoRepository(authService);
+  const remitoRepo = new XubioRemitoRepository(authService);
+  const vendedorRepo = new XubioVendedorRepository(authService);
+  const puntoVentaRepo = new XubioPuntoVentaRepository(authService);
 
   // Application (Use Cases)
   const getClientesUseCase = new GetClientesUseCase(clienteRepo);
@@ -47,6 +54,13 @@ async function bootstrap() {
   const getFacturasCompraUseCase = new GetFacturasCompraUseCase(facturaCompraRepo);
   const getOrdenesCompraUseCase = new GetOrdenesCompraUseCase(ordenCompraRepo);
   const getDepositosUseCase = new GetDepositosUseCase(depositoRepo);
+  const getPagosUseCase = new GetPagosUseCase(pagoRepo);
+  const getBancosUseCase = new GetBancosUseCase(bancoRepo);
+  const getCuentasContablesUseCase = new GetCuentasContablesUseCase(cuentaContableRepo);
+  const getPresupuestosUseCase = new GetPresupuestosUseCase(presupuestoRepo);
+  const getRemitosUseCase = new GetRemitosUseCase(remitoRepo);
+  const getVendedoresUseCase = new GetVendedoresUseCase(vendedorRepo);
+  const getPuntosVentaUseCase = new GetPuntosVentaUseCase(puntoVentaRepo);
 
   // Register Tools
   const registry = ToolRegistry.getInstance();
@@ -94,6 +108,41 @@ async function bootstrap() {
   registry.register("get_depositos", {
     useCase: getDepositosUseCase,
     description: "Obtener el listado de depósitos de Xubio",
+  });
+
+  registry.register("get_pagos", {
+    useCase: getPagosUseCase,
+    description: "Obtener el listado de pagos de Xubio",
+  });
+
+  registry.register("get_bancos", {
+    useCase: getBancosUseCase,
+    description: "Obtener el listado de bancos de Xubio",
+  });
+
+  registry.register("get_cuentas_contables", {
+    useCase: getCuentasContablesUseCase,
+    description: "Obtener el listado de cuentas contables de Xubio",
+  });
+
+  registry.register("get_presupuestos", {
+    useCase: getPresupuestosUseCase,
+    description: "Obtener el listado de presupuestos de Xubio",
+  });
+
+  registry.register("get_remitos", {
+    useCase: getRemitosUseCase,
+    description: "Obtener el listado de remitos de venta de Xubio",
+  });
+
+  registry.register("get_vendedores", {
+    useCase: getVendedoresUseCase,
+    description: "Obtener el listado de vendedores de Xubio",
+  });
+
+  registry.register("get_puntos_venta", {
+    useCase: getPuntosVentaUseCase,
+    description: "Obtener el listado de puntos de venta de Xubio",
   });
 
   // Presentation (MCP)

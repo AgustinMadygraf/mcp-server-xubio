@@ -5,7 +5,7 @@ import { XubioFacturaRepository } from "../src/infrastructure/api/XubioFacturaRe
 import { XubioProveedorRepository } from "../src/infrastructure/api/XubioProveedorRepository.js";
 import { XubioStockRepository } from "../src/infrastructure/api/XubioStockRepository.js";
 import { XubioCobranzaRepository } from "../src/infrastructure/api/XubioCobranzaRepository.js";
-import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository } from "../src/infrastructure/api/BatchXubioRepositories.js";
+import { XubioFacturaCompraRepository, XubioOrdenCompraRepository, XubioDepositoRepository, XubioPagoRepository, XubioBancoRepository, XubioCuentaContableRepository, XubioPresupuestoRepository, XubioRemitoRepository, XubioVendedorRepository, XubioPuntoVentaRepository } from "../src/infrastructure/api/BatchXubioRepositories.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -23,6 +23,13 @@ async function runTests() {
     { name: "Facturas Compra", repo: new XubioFacturaCompraRepository(auth) },
     { name: "Ordenes Compra", repo: new XubioOrdenCompraRepository(auth) },
     { name: "Depositos", repo: new XubioDepositoRepository(auth) },
+    { name: "Pagos", repo: new XubioPagoRepository(auth) },
+    { name: "Bancos", repo: new XubioBancoRepository(auth) },
+    { name: "Cuentas Contables", repo: new XubioCuentaContableRepository(auth) },
+    { name: "Presupuestos", repo: new XubioPresupuestoRepository(auth) },
+    { name: "Remitos", repo: new XubioRemitoRepository(auth) },
+    { name: "Vendedores", repo: new XubioVendedorRepository(auth) },
+    { name: "Puntos Venta", repo: new XubioPuntoVentaRepository(auth) },
   ];
 
   console.log("🚀 Iniciando suite de pruebas de regresión...\n");
