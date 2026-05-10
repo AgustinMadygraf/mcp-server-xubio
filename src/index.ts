@@ -34,8 +34,10 @@ import {
 import { validateConfig } from "./infrastructure/config/Config.js";
 import { McpServer } from "./infrastructure/mcp/McpServer.js";
 import { ToolRegistry } from "./infrastructure/mcp/ToolRegistry.js";
+import { Logger } from "mcp-server-core";
 
 async function main() {
+  const logger = Logger.getInstance();
   const config = validateConfig();
 
   // Infrastructure
@@ -151,12 +153,13 @@ async function main() {
   // Presentation (MCP)
   const mcpServer = new McpServer();
   mcpServer.run().catch((error) => {
-    console.error("Critical error in MCP Server:", error);
+    logger.error("Critical error in MCP Server:", error);
     process.exit(1);
   });
 }
 
 main().catch((error) => {
-  console.error("Failed to start server:", error);
+  const logger = Logger.getInstance();
+  logger.error("Failed to start server:", error);
   process.exit(1);
 });

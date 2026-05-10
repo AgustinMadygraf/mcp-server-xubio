@@ -1,94 +1,86 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
+import readline from "readline";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+const question = (query: string): Promise<string> => {
+  return new Promise((resolve) => rl.question(query, resolve));
+};
 
 const SERVER_NAME = "xubio";
 const PROJECT_ROOT = process.cwd();
 const SERVER_PATH = path.join(PROJECT_ROOT, "dist", "index.js");
 
 const CONFIG_LOCATIONS = [
-  // Antigravity Settings
   {
     name: "Antigravity Settings",
     path: path.join(os.homedir(), ".gemini", "settings.json"),
     type: "mcpServers"
   },
-  // Antigravity / Gemini CLI
   {
     name: "Antigravity/Gemini CLI",
     path: path.join(os.homedir(), ".gemini", "antigravity", "mcp_config.json"),
     type: "mcpServers"
   },
-  // Claude Desktop (Linux)
   {
     name: "Claude Desktop (Linux)",
     path: path.join(os.homedir(), ".config", "Claude", "claude_desktop_config.json"),
-    type: "mcpServers"
-  },
-  // Claude Desktop (macOS)
-  {
-    name: "Claude Desktop (macOS)",
-    path: path.join(os.homedir(), "Library", "Application Support", "Claude", "claude_desktop_config.json"),
-    type: "mcpServers"
-  },
-  // Claude Code
-  {
-    name: "Claude Code",
-    path: path.join(os.homedir(), ".claude", "config.json"),
     type: "mcpServers"
   }
 ];
 
 async function setup() {
-  console.log("🚀 Iniciando configuración automática del servidor Xubio MCP...");
+  console.log("🚀 Asistente de Configuración Xubio MCP\n");
 
-  let configurationsFound = 0;
+  const clientId = await question("🔑 Introduce tu XUBIO_CLIENT_ID: ");
+  const secretId = await question("🔐 Introduce tu XUBIO_SECRET_ID: ");
 
+  if (!clientId || !secretId) {
+    console.error("❌ Error: Ambos campos son obligatorios.");
+    rl.close();
+    return;
+  }
+
+  // 1. Guardar en .env
+  const envContent = `XUBIO_CLIENT_ID=${clientId}\nXUBIO_SECRET_ID=${secretId}\n`;
+  fs.writeFileSync(path.join(PROJECT_ROOT, ".env"), envContent);
+  console.log("\n✅ Archivo .env actualizado.");
+
+  // 2. Actualizar Clientes MCP
   for (const loc of CONFIG_LOCATIONS) {
     if (fs.existsSync(loc.path)) {
-      console.log(`\n🔍 Detectado: ${loc.name} en ${loc.path}`);
       try {
         const content = fs.readFileSync(loc.path, "utf-8").trim();
-        let config: any = {};
-        
-        if (content) {
-          try {
-            config = JSON.parse(content);
-          } catch (e) {
-            console.warn(`⚠️ Archivo ${loc.name} malformado, se inicializará uno nuevo.`);
-          }
-        }
-        
+        let config = JSON.parse(content || "{}");
         if (!config.mcpServers) config.mcpServers = {};
         
         config.mcpServers[SERVER_NAME] = {
           command: "node",
           args: [SERVER_PATH],
           env: {
-            XUBIO_CLIENT_ID: process.env.XUBIO_CLIENT_ID || "TU_CLIENT_ID",
-            XUBIO_SECRET_ID: process.env.XUBIO_SECRET_ID || "TU_SECRET_ID"
+            XUBIO_CLIENT_ID: clientId,
+            XUBIO_SECRET_ID: secretId
           }
         };
 
         fs.writeFileSync(loc.path, JSON.stringify(config, null, 2));
-        console.log(`✅ Configuración actualizada exitosamente para ${loc.name}`);
-        configurationsFound++;
-      } catch (error: any) {
-        console.error(`❌ Error al actualizar ${loc.name}: ${error.message}`);
+        console.log(`✅ Configuración actualizada en ${loc.name}`);
+      } catch (e) {
+        console.error(`❌ Error en ${loc.name}`);
       }
     }
   }
 
-  if (configurationsFound === 0) {
-    console.log("\n⚠️ No se detectaron archivos de configuración de clientes MCP conocidos.");
-    console.log("Puedes configurar manualmente el servidor usando esta ruta:");
-    console.log(SERVER_PATH);
-  } else {
-    console.log(`\n🎉 Configuración completada en ${configurationsFound} clientes.`);
-  }
+  console.log("\n🎉 ¡Xubio configurado para Datamaq!");
+  rl.close();
 }
 
 setup().catch(console.error);

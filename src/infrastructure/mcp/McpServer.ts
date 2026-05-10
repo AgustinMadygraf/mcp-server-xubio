@@ -7,10 +7,12 @@ import {
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { ToolRegistry } from "./ToolRegistry.js";
+import { Logger } from "mcp-server-core";
 
 export class McpServer {
   private server: Server;
   private registry: ToolRegistry;
+  private logger = Logger.getInstance();
 
   constructor() {
     this.server = new Server(
@@ -20,7 +22,7 @@ export class McpServer {
     this.registry = ToolRegistry.getInstance();
 
     this.setupHandlers();
-    this.server.onerror = (error) => console.error("[MCP Error]", error);
+    this.server.onerror = (error) => this.logger.error("[MCP Error]", error);
   }
 
   private setupHandlers() {
@@ -44,12 +46,12 @@ export class McpServer {
   private async handleRequest(action: () => Promise<any>) {
     try {
       const data = await action();
-      console.error(`[MCP] Petición procesada exitosamente.`);
+      this.logger.info(`[MCP] Petición procesada exitosamente.`);
       return {
         content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
       };
     } catch (error: any) {
-      console.error(`[MCP] Error procesando petición: ${error.message}`);
+      this.logger.error(`[MCP] Error procesando petición: ${error.message}`);
       return {
         content: [{ type: "text", text: `Error: ${error.message}` }],
         isError: true,
@@ -60,6 +62,6 @@ export class McpServer {
   async run() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error("Xubio MCP server corriendo en stdio");
+    this.logger.info("Xubio MCP server corriendo en stdio");
   }
 }

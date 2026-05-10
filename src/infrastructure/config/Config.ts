@@ -1,5 +1,6 @@
 import { z } from "zod";
 import dotenv from "dotenv";
+import { Logger } from "mcp-server-core";
 
 import { IConfigProvider } from "./IConfigProvider.js";
 
@@ -16,12 +17,13 @@ export class ConfigProvider implements IConfigProvider {
   private config: z.infer<typeof envSchema>;
 
   constructor() {
+    const logger = Logger.getInstance();
     const result = envSchema.safeParse(process.env);
     if (!result.success) {
       const errors = result.error.flatten().fieldErrors;
-      console.error("❌ Error de configuración (Variables de entorno):");
+      logger.error("❌ Error de configuración (Variables de entorno):");
       Object.entries(errors).forEach(([field, messages]) => {
-        console.error(` - ${field}: ${messages?.join(", ")}`);
+        logger.error(` - ${field}: ${messages?.join(", ")}`);
       });
       process.exit(1);
     }

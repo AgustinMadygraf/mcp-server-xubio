@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mcp-server-core": "file:../mcp-server-core",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "axios": "^1.15.2",
     "dotenv": "^17.4.2",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.5",
     "rimraf": "^6.1.3",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
